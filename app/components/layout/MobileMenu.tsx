@@ -1,14 +1,18 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 
-const MobileMenu = () => {
+interface MobileMenuProps {
+  handleMobileMenu: () => void;
+}
+
+const MobileMenu: React.FC<MobileMenuProps> = ({ handleMobileMenu }) => {
   const pathname = usePathname();
   const [currentMenuItem, setCurrentMenuItem] = useState("");
   useEffect(() => {
-    setCurrentMenuItem(pathname);
+    setCurrentMenuItem(pathname as string);
   }, [pathname]);
 
   const checkCurrentMenuItem = useCallback(
@@ -45,87 +49,15 @@ const MobileMenu = () => {
           id="navbarSupportedContent"
         >
           <ul className="navigation clearfix">
-            <li
-              className={`dropdown2 home ${
-                isAccordion == 1 ? "open" : ""
-              } ${checkParentActive([
-                "/home-02",
-                "/home-03",
-                "/home-04",
-                "/home-05",
-                "/home-06",
-              ])}`}
-            >
-              <Link href="#">Home</Link>
-              <ul style={{ display: `${isAccordion == 1 ? "block" : "none"}` }}>
-                <li className={`${checkCurrentMenuItem("/")}`}>
-                  <Link href="/">Homepage 01</Link>
-                </li>
-                <li className={`${checkCurrentMenuItem("/home-02")}`}>
-                  <Link href="/home-02">Homepage 02</Link>
-                </li>
-                <li className={`${checkCurrentMenuItem("/home-03")}`}>
-                  <Link href="/home-03">Homepage 03</Link>
-                </li>
-                <li className={`${checkCurrentMenuItem("/home-04")}`}>
-                  <Link href="/home-04">Homepage 04</Link>
-                </li>
-                <li className={`${checkCurrentMenuItem("/home-05")}`}>
-                  <Link href="/home-05">Homepage 05</Link>
-                </li>
-                <li className={`${checkCurrentMenuItem("/home-06")}`}>
-                  <Link href="/home-06">Homepage 06</Link>
-                </li>
-              </ul>
-              <div
-                className="dropdown2-btn"
-                onClick={() => handleAccordion(1)}
-              />
+            <li className={`home`}>
+              <Link href="/" onClick={handleMobileMenu}>
+                Home
+              </Link>
             </li>
-            <li
-              className={`dropdown2 ${checkParentActive([
-                "/property-halfmap-grid",
-                "/property-halfmap-list",
-                "/topmap-grid",
-                "/topmap-list",
-                "/sidebar-grid",
-                "/sidebar-list",
-              ])}`}
-            >
-              <Link href="#">Listing</Link>
-
-              <ul>
-                <li
-                  className={`${checkCurrentMenuItem(
-                    "/property-halfmap-grid"
-                  )}`}
-                >
-                  <Link href="/property-halfmap-grid">
-                    Property Half Map Grid
-                  </Link>
-                </li>
-                <li
-                  className={`${checkCurrentMenuItem(
-                    "/property-halfmap-list"
-                  )}`}
-                >
-                  <Link href="/property-halfmap-list">
-                    Property Half Map List
-                  </Link>
-                </li>
-                <li className={`${checkCurrentMenuItem("/topmap-grid")}`}>
-                  <Link href="/topmap-grid">Find Topmap Grid</Link>
-                </li>
-                <li className={`${checkCurrentMenuItem("/topmap-list")}`}>
-                  <Link href="/topmap-list">Find Topmap List</Link>
-                </li>
-                <li className={`${checkCurrentMenuItem("/sidebar-grid")}`}>
-                  <Link href="/sidebar-grid">Find Sidebar Grid</Link>
-                </li>
-                <li className={`${checkCurrentMenuItem("/sidebar-list")}`}>
-                  <Link href="/sidebar-list">Find Sidebar List</Link>
-                </li>
-              </ul>
+            <li>
+              <Link href="/properties" onClick={handleMobileMenu}>
+                Properties
+              </Link>
             </li>
             <li
               className={`dropdown2 ${

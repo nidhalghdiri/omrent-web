@@ -186,7 +186,7 @@ const Header: React.FC<HeaderProps> = ({
                   Register
                 </Link>
               </div>
-              <MobileMenu />
+              <MobileMenu handleMobileMenu={handleMobileMenu} />
               <div className="button-mobi-sell">
                 <Link className="tf-btn primary" href="/add-property">
                   Submit Property
