@@ -100,6 +100,7 @@ const Recommended: React.FC<RecommendedProps> = ({ currentUser, listings }) => {
                         key={listing.id}
                         currentUser={currentUser}
                         listing={listing}
+                        isSearchList={false}
                       />
                     );
                   })}

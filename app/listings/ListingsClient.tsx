@@ -4,13 +4,14 @@ import { SafeListing, SafeUser } from "../types";
 import FilterSidebar from "../components/layout/FilterSidebar";
 import ListingCardTwo from "../components/elements/ListingCardTwo";
 import Link from "next/link";
+import ListingCard from "../components/elements/ListingCard";
 
-interface PropertiesClientProps {
+interface ListingsClientProps {
   currentUser?: SafeUser | null;
   listings?: SafeListing[];
 }
 
-const PropertiesClient: React.FC<PropertiesClientProps> = ({
+const ListingsClient: React.FC<ListingsClientProps> = ({
   currentUser,
   listings,
 }) => {
@@ -96,10 +97,11 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
                     {listings &&
                       listings.map((listing: SafeListing) => {
                         return (
-                          <ListingCardTwo
+                          <ListingCard
                             key={listing.id}
                             currentUser={currentUser}
                             listing={listing}
+                            isSearchList
                           />
                         );
                       })}
@@ -136,4 +138,4 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
   );
 };
 
-export default PropertiesClient;
+export default ListingsClient;

@@ -52,7 +52,7 @@ const Menu = () => {
               <Link href="/">Home</Link>
             </li>
             <li>
-              <Link href="/properties">Properties</Link>
+              <Link href="/listings">Properties</Link>
             </li>
             <li
               className={`dropdown2 ${checkParentActive([

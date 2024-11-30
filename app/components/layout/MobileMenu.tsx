@@ -55,7 +55,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ handleMobileMenu }) => {
               </Link>
             </li>
             <li>
-              <Link href="/properties" onClick={handleMobileMenu}>
+              <Link href="/listings" onClick={handleMobileMenu}>
                 Properties
               </Link>
             </li>

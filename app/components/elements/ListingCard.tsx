@@ -6,14 +6,19 @@ import React from "react";
 interface ListingCardProps {
   currentUser?: SafeUser | null;
   listing: SafeListing;
+  isSearchList: boolean;
 }
 
-const ListingCard: React.FC<ListingCardProps> = ({ currentUser, listing }) => {
+const ListingCard: React.FC<ListingCardProps> = ({
+  currentUser,
+  listing,
+  isSearchList,
+}) => {
   return (
-    <div className="col-xl-3 col-md-6">
-      <div className="homeya-box md">
+    <div className={`${!isSearchList ? "col-xl-3 col-md-6" : "col-md-6"}`}>
+      <div className={`homeya-box ${!isSearchList && "md"}`}>
         <div className="archive-top">
-          <Link href="/property-details-v1" className="images-group">
+          <Link href={`/listings/${listing.id}`} className="images-group">
             <div className="images-style">
               <Image
                 alt="listing"
@@ -46,7 +51,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ currentUser, listing }) => {
           </Link>
           <div className="content">
             <div className="text-1 text-capitalize">
-              <Link href="/property-details-v1" className="link">
+              <Link href={`/listings/${listing.id}`} className="link">
                 {listing.title}
               </Link>
             </div>
@@ -71,7 +76,17 @@ const ListingCard: React.FC<ListingCardProps> = ({ currentUser, listing }) => {
           </div>
         </div>
         <div className="archive-bottom d-flex justify-content-between align-items-center">
-          <p>Apród Endre</p>
+          {isSearchList ? (
+            <div className="d-flex gap-8 align-items-center">
+              <div className="avatar avt-40 round">
+                <img src="/images/avatar/avt-6.jpg" alt="avt" />
+              </div>
+              <span>Arlene McCoy</span>
+            </div>
+          ) : (
+            <p>Apród Endre</p>
+          )}
+
           <div className="d-flex align-items-center">
             <div className="h7 fw-7">${listing.price}</div>
             <p className="text-variant-1">/Night</p>
