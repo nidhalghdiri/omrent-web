@@ -6,6 +6,7 @@ import AddClassBody from "../elements/AddClassBody";
 import LoginModal from "../elements/LoginModal";
 import { SafeUser } from "@/app/types";
 import RegisterModal from "../elements/RegisterModal";
+import Footer from "./Footer";
 
 interface LayoutProps {
   currentUser?: SafeUser | null;
@@ -77,7 +78,7 @@ const Layout: React.FC<LayoutProps> = ({
 
             {children}
           </main>
-          {footerStyle === 1 ? <p>footer</p> : null}
+          {footerStyle === 1 ? <Footer /> : null}
         </div>
       </div>
       <LoginModal />
