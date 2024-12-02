@@ -2372,7 +2372,7 @@ label {
 }
 .flat-slider.home-1 {
   background-image: url(../images/slider/slider-1.jpg);
-  background-attachment: fixed;
+  background-attachment: contain;
 }
 .flat-slider.home-1 .overlay {
   background: #161e2d;
