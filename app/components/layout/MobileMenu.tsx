@@ -63,43 +63,37 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ handleMobileMenu }) => {
               className={`dropdown2 ${
                 isAccordion == 6 ? "open" : ""
               } ${checkParentActive([
-                "/dashboard",
-                "/my-favorites",
-                "/my-invoices",
-                "/my-favorites",
-                "/reviews",
-                "/my-profile",
-                "/add-property",
+                "/who-we-are",
+                "/how-it-works",
+                "/blog",
+                "/help-faq",
               ])}`}
             >
-              <Link href="#">Dashboard</Link>
+              <Link href="#">About Us</Link>
               <ul style={{ display: `${isAccordion == 6 ? "block" : "none"}` }}>
-                <li className={`${checkCurrentMenuItem("/dashboard")}`}>
-                  <Link href="/dashboard">Dashboard</Link>
+                <li className={`${checkCurrentMenuItem("/how-it-works")}`}>
+                  <Link href="/who-we-are">Who we are?</Link>
                 </li>
-                <li className={`${checkCurrentMenuItem("/my-favorites")}`}>
-                  <Link href="/my-favorites">My Properties</Link>
+                <li className={`${checkCurrentMenuItem("/how-it-works")}`}>
+                  <Link href="/how-it-works">How It Works</Link>
                 </li>
-                <li className={`${checkCurrentMenuItem("/my-invoices")}`}>
-                  <Link href="/my-invoices">My Invoices</Link>
+                <li className={`${checkCurrentMenuItem("/blog")}`}>
+                  <Link href="/blog">Blog</Link>
                 </li>
-                <li className={`${checkCurrentMenuItem("/my-favorites")}`}>
-                  <Link href="/my-favorites">My Favorites</Link>
-                </li>
-                <li className={`${checkCurrentMenuItem("/reviews")}`}>
-                  <Link href="/reviews">Reviews</Link>
-                </li>
-                <li className={`${checkCurrentMenuItem("/my-profile")}`}>
-                  <Link href="/my-profile">My Profile</Link>
-                </li>
-                <li className={`${checkCurrentMenuItem("/add-property")}`}>
-                  <Link href="/add-property">Add Property</Link>
+                <li className={`${checkCurrentMenuItem("/help-faq")}`}>
+                  <Link href="/help-faq">Help/FAQ</Link>
                 </li>
               </ul>
               <div
                 className="dropdown2-btn"
                 onClick={() => handleAccordion(6)}
               />
+            </li>
+            <li>
+              <Link href="/pricing">Pricing</Link>
+            </li>
+            <li>
+              <Link href="/contact-us">Contact Us</Link>
             </li>
           </ul>
         </div>

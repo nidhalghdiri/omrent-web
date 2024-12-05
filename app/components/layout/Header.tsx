@@ -110,6 +110,34 @@ const Header: React.FC<HeaderProps> = ({
     );
   }
 
+  let mobileLoginInfo = (
+    <div className="login-box flex align-items-center">
+      <Link href="#modalLogin" data-bs-toggle="modal">
+        Login
+      </Link>
+      <span>/</span>
+      <Link href="#modalRegister" data-bs-toggle="modal">
+        Register
+      </Link>
+    </div>
+  );
+
+  if (currentUser) {
+    mobileLoginInfo = (
+      <>
+        <a
+          onClick={handleToggle}
+          className={`box-avatar d-flex align-items-center`}
+        >
+          <div className="avatar avt-40 round">
+            <Avatar src={currentUser?.image} />
+          </div>
+          <p className="name mx-2 text-bold">{currentUser.name}</p>
+        </a>
+      </>
+    );
+  }
+
   return (
     <>
       <header
@@ -177,15 +205,7 @@ const Header: React.FC<HeaderProps> = ({
               </Link>
             </div>
             <div className="bottom-canvas">
-              <div className="login-box flex align-items-center">
-                <Link href="#modalLogin" data-bs-toggle="modal">
-                  Login
-                </Link>
-                <span>/</span>
-                <Link href="#modalRegister" data-bs-toggle="modal">
-                  Register
-                </Link>
-              </div>
+              {mobileLoginInfo}
               <MobileMenu handleMobileMenu={handleMobileMenu} />
               <div className="button-mobi-sell">
                 <Link className="tf-btn primary" href="/add-property">
