@@ -1,7 +1,10 @@
+"use client";
+import useFavorite from "@/app/hooks/useFavorite";
 import { SafeListing, SafeUser } from "@/app/types";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import HeartButton from "./HeartButton";
 
 interface ListingCardProps {
   currentUser?: SafeUser | null;
@@ -18,7 +21,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
     <div className={`${!isSearchList ? "col-xl-3 col-md-6" : "col-md-6"}`}>
       <div className={`homeya-box ${!isSearchList && "md"}`}>
         <div className="archive-top">
-          <Link href={`/listings/${listing.id}`} className="images-group">
+          <div className="images-group">
             <div className="images-style">
               <Image
                 alt="listing"
@@ -37,9 +40,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
                 <li className="box-icon w-32">
                   <span className="icon icon-arrLeftRight" />
                 </li>
-                <li className="box-icon w-32">
-                  <span className="icon icon-heart" />
-                </li>
+                <HeartButton listingId={listing.id} currentUser={currentUser} />
                 <li className="box-icon w-32">
                   <span className="icon icon-eye" />
                 </li>
@@ -48,7 +49,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
             <div className="bottom">
               <span className="flag-tag style-2">{listing.category}</span>
             </div>
-          </Link>
+          </div>
           <div className="content">
             <div className="text-1 text-capitalize">
               <Link href={`/listings/${listing.id}`} className="link">
