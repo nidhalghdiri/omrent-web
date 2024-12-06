@@ -2,7 +2,6 @@
 import React, { useCallback, useState } from "react";
 import { SafeListing, SafeUser } from "../types";
 import FilterSidebar from "../components/layout/FilterSidebar";
-import ListingCardTwo from "../components/elements/ListingCardTwo";
 import Link from "next/link";
 import ListingCard from "../components/elements/ListingCard";
 

@@ -700,6 +700,7 @@ label {
 .header-account {
   display: flex;
   align-items: center;
+  position: relative; /* Make it a positioned ancestor */
 }
 .header-account ul {
   margin-right: 20px;
@@ -8663,6 +8664,13 @@ label {
   content: none;
 }
 .header-account .dropdown-menu {
+  position: absolute;
+  top: 100%; /* Positions it directly below the toggle */
+  left: 0; /* Aligns it to the left of the `.header-account` */
+  z-index: 10; /* Ensures it displays above other elements */
+  margin-top: 0.5rem; /* Add spacing if needed */
+}
+/* .header-account .dropdown-menu {
   max-width: 204px;
   width: 100%;
   margin-top: 18px !important;
@@ -8672,7 +8680,7 @@ label {
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
   padding: 0;
-}
+} */
 .header-account .dropdown-menu .dropdown-item {
   padding: 16px 24px;
   line-height: 26px;

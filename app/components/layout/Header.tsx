@@ -8,6 +8,9 @@ import useLoginModal from "@/app/hooks/useLoginModal";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import { SafeUser } from "@/app/types";
 import Avatar from "../elements/Avatar";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
 interface HeaderProps {
   currentUser?: SafeUser | null;
   scroll: boolean;
@@ -26,6 +29,8 @@ const Header: React.FC<HeaderProps> = ({
   handleRegister,
 }) => {
   console.log({ currentUser });
+
+  const router = useRouter();
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
   const [isToggled, setToggled] = useState(false);
@@ -71,32 +76,30 @@ const Header: React.FC<HeaderProps> = ({
         </a>
         <div
           className={`dropdown-menu  ${isToggled ? "show" : ""}`}
-          style={{
-            position: "absolute",
-            inset: "0px auto auto 0px",
-            margin: 0,
-            transform: "translate(1494px, 62px)",
-          }}
+          // style={{
+          //   position: "absolute",
+          //   top: "100%", // Dropdown appears below the button
+          //   left: "0", // Align to the left of the button
+          //   marginTop: "0.5rem",
+          // }}
         >
           <Link className="dropdown-item" href="/my-favorites">
             My Properties
           </Link>
-          <Link className="dropdown-item" href="/my-invoices">
-            My Invoices
-          </Link>
-          <Link className="dropdown-item" href="/my-favorites">
+          <Link className="dropdown-item" href="/favorites">
             My Favorites
-          </Link>
-          <Link className="dropdown-item" href="/reviews">
-            Reviews
           </Link>
           <Link className="dropdown-item" href="/my-profile">
             My Profile
           </Link>
-          <Link className="dropdown-item" href="/add-property">
-            Add Property
-          </Link>
-          <Link className="dropdown-item" href="/">
+          <Link
+            className="dropdown-item"
+            href="#"
+            onClick={() => {
+              signOut();
+              router.push("/");
+            }}
+          >
             Logout
           </Link>
         </div>
