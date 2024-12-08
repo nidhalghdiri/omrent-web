@@ -105,7 +105,7 @@ const Header: React.FC<HeaderProps> = ({
         </div>
 
         <div className="flat-bt-top">
-          <Link className="tf-btn primary" href="/add-property">
+          <Link className="tf-btn primary" href="/dashboard/add-property">
             Submit Property
           </Link>
         </div>
