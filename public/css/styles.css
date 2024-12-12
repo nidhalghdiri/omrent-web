@@ -8793,7 +8793,8 @@ label {
 }
 
 .widget-box-2 {
-  padding: 36px 40px 40px;
+  padding: 16px 24px;
+  /* padding: 36px 40px 40px; */
   border-radius: 20px;
   border: 1px solid #e4e4e4;
   background-color: #ffffff;
@@ -10127,6 +10128,12 @@ tr {
   .header-account .dropdown-menu {
     margin-top: 21px !important;
   }
+  .sidebar-menu-dashboard {
+    display: none; /* Hide sidebar */
+  }
+  .main-content-inner {
+    flex-direction: column;
+  }
 }
 @media only screen and (max-width: 700px) {
   .single-property-info .inner-box .label {
@@ -10397,6 +10404,20 @@ tr {
 
 .react-datepicker-wrapper {
   width: 100%;
+}
+
+/* Stepper */
+.p-stepper {
+  margin: 3rem !important;
+}
+.p-stepper .p-stepper-nav {
+  margin: 1.5rem 0 !important;
+}
+.p-stepper .p-stepper-header.p-highlight .p-stepper-action .p-stepper-number {
+  background-color: #eb5e55;
+}
+.p-stepper .p-stepper-header:has(~ .p-highlight) .p-stepper-separator {
+  background-color: #eb5e55;
 }
 
 /*# sourceMappingURL=styles.css.map */
