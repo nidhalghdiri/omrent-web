@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Input from "../elements/Input";
+import Input from "../elements/LoginInput";
 
 interface ModalProps {
   isOpen?: boolean;

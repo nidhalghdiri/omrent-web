@@ -6,7 +6,7 @@ import axios from "axios";
 import { useCallback, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import Input from "./Input";
+import Input from "./LoginInput";
 import Link from "next/link";
 import Modal from "../layout/Modal";
 

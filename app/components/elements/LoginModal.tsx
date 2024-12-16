@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback } from "react";
-import Input from "./Input";
+import Input from "./LoginInput";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
@@ -9,6 +9,7 @@ import Link from "next/link";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import Modal from "../layout/Modal";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
+import Button from "../buttons/Button";
 
 const LoginModal = () => {
   const router = useRouter();
@@ -86,9 +87,10 @@ const LoginModal = () => {
           Continue with Google
         </Link>
       </div>
-      <button className="tf-btn primary w-100" onClick={handleSubmit(onSubmit)}>
+      {/* <button className="tf-btn primary w-100" onClick={handleSubmit(onSubmit)}>
         Login
-      </button>
+      </button> */}
+      <Button title="Login" handleSubmit={handleSubmit(onSubmit)} />
       <div className="mt-12 text-variant-1 text-center noti">
         Not registered yet?
         <a onClick={toggle} className="text-black fw-5">

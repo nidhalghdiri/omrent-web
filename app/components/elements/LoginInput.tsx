@@ -3,7 +3,7 @@
 import React from "react";
 import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 
-interface InputProps {
+interface LoginInputProps {
   id: string;
   label: string;
   type?: string;
@@ -14,7 +14,7 @@ interface InputProps {
   errors: FieldErrors;
 }
 
-const Input: React.FC<InputProps> = ({
+const LoginInput: React.FC<LoginInputProps> = ({
   id,
   label,
   type,
@@ -59,4 +59,4 @@ const Input: React.FC<InputProps> = ({
   );
 };
 
-export default Input;
+export default LoginInput;

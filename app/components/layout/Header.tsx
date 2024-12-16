@@ -10,6 +10,7 @@ import { SafeUser } from "@/app/types";
 import Avatar from "../elements/Avatar";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Button from "../buttons/Button";
 
 interface HeaderProps {
   currentUser?: SafeUser | null;
@@ -53,9 +54,7 @@ const Header: React.FC<HeaderProps> = ({
         </ul>
       </div>
       <div className="flat-bt-top">
-        <Link className="tf-btn primary" href="/add-property">
-          Submit Property
-        </Link>
+        <Button title="Submit Property" link href="/dashboard/add-property" />
       </div>
     </div>
   );
@@ -105,9 +104,7 @@ const Header: React.FC<HeaderProps> = ({
         </div>
 
         <div className="flat-bt-top">
-          <Link className="tf-btn primary" href="/dashboard/add-property">
-            Submit Property
-          </Link>
+          <Button title="Submit Property" link href="/dashboard/add-property" />
         </div>
       </div>
     );
@@ -211,9 +208,11 @@ const Header: React.FC<HeaderProps> = ({
               {mobileLoginInfo}
               <MobileMenu handleMobileMenu={handleMobileMenu} />
               <div className="button-mobi-sell">
-                <Link className="tf-btn primary" href="/add-property">
-                  Submit Property
-                </Link>
+                <Button
+                  title="Submit Property"
+                  link
+                  href="/dashboard/add-property"
+                />
               </div>
               <div className="mobi-icon-box">
                 <div className="box d-flex align-items-center">
