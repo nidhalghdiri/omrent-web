@@ -5,8 +5,9 @@ interface IParams {
   listingId?: string;
 }
 
-export default async function getListingById(params: IParams) {
+export default async function getListingById(paramsPromise: Promise<IParams>) {
   try {
+    const params = await paramsPromise; // Await the params
     const { listingId } = params;
     // Ensure that listingId is a valid ObjectId
     if (!listingId || !ObjectId.isValid(listingId)) {

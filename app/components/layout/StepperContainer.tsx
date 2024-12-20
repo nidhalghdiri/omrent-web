@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { PrimeReactProvider } from "primereact/api";
 import { Stepper } from "primereact/stepper";
 import { StepperPanel } from "primereact/stepperpanel";
@@ -9,9 +9,102 @@ import "@/node_modules/primereact/resources/themes/mdc-light-indigo/theme.css";
 import "@/node_modules/primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import Input from "../inputs/Input";
+import Select from "../inputs/Select";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import ImageUpload from "../inputs/ImageUpload";
+import SimpleImageUpload from "../inputs/SimpleImageUpload";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+
+const propertyTypes = [
+  { value: "apartment", text: "Apartment" },
+  { value: "villa", text: "Villa" },
+  { value: "commercial", text: "Commercial" },
+];
+const propertyCountries = [
+  { value: "om", text: "Oman" },
+  { value: "usa", text: " United States" },
+  { value: "uk", text: "United Kingdom" },
+  { value: "rus", text: "Russia" },
+];
+const propertyStates = [
+  { value: "none", text: "None" },
+  { value: "salalah", text: "Salalah" },
+  { value: "texas", text: "Texas" },
+  { value: "newyork", text: "New York" },
+];
+
+const rentCycles = [
+  { value: "year", text: "Yearly" },
+  { value: "month", text: "Monthly" },
+  { value: "day", text: "Daily" },
+];
 
 const StepperContainer = () => {
   const stepperRef = React.useRef<any>(null);
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Form Handling
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+    reset,
+  } = useForm<FieldValues>({
+    defaultValues: {
+      title: "",
+      type: "",
+      description: "",
+      country: "",
+      state: "",
+      address: "",
+      location: null,
+      propertyId: "",
+      size: "",
+      roomCount: 1,
+      bathroomCount: 1,
+      price: 0,
+      rentCycle: "",
+      guestCount: 1,
+      imageSrc: "",
+    },
+  });
+  const imageSrc = watch("imageSrc");
+  const setCustomValue = (id: string, value: any) => {
+    console.log(`Setting ${id} to`, value);
+    setValue(id, value, { shouldValidate: true });
+  };
+  // Submission Handler
+  const onSubmit = (data: FieldValues) => {
+    setIsLoading(true);
+    console.log("Form Data:", data);
+    const validatedData = {
+      ...data,
+      roomCount: parseInt(data.roomCount, 10),
+      bathroomCount: parseInt(data.bathroomCount, 10),
+      price: parseInt(data.price, 10),
+      state: data.state || "Unknown", // Default value
+      location: data.location || "Unknown", // Default value
+    };
+    console.log("validated Data:", validatedData);
+    axios
+      .post("../api/listings", data)
+      .then(() => {
+        toast.success("Listing Created!");
+        router.push("/");
+        reset();
+      })
+      .catch(() => {
+        toast.error("Somthing went wrong.");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   return (
     <PrimeReactProvider>
@@ -27,14 +120,32 @@ const StepperContainer = () => {
             <div className="widget-box-2">
               <h6 className="title">Property Basis</h6>
               <div className="box-info-property">
+                <div className="box grid-2 gap-30">
+                  <Input
+                    id="title"
+                    label="Title"
+                    required
+                    type="text"
+                    placeholder="Spacious 2-Bedroom Apartment"
+                    register={register}
+                    errors={errors}
+                  />
+                  <Select
+                    register={register}
+                    errors={errors}
+                    id="type"
+                    label="Property Type"
+                    defaultValue="apartment"
+                    options={propertyTypes}
+                  />
+                </div>
                 <Input
-                  id="title"
-                  label="Title"
-                  required
-                  type="text"
-                  placeholder="Jony Dane"
+                  register={register}
+                  errors={errors}
+                  id="description"
+                  label="Description"
+                  type="textarea"
                 />
-                <Input id="desc" label="Description" type="textarea" />
               </div>
             </div>
             <div className="flex pt-4 justify-content-end">
@@ -54,71 +165,34 @@ const StepperContainer = () => {
               <div className="widget-box-2">
                 <h6 className="title">Property Details</h6>
                 <div className="box-info-property">
-                  <div className="box grid-3 gap-30">
+                  <div className="box grid-3 gap-30 mb-2">
+                    <Select
+                      register={register}
+                      errors={errors}
+                      id="country"
+                      label="Country"
+                      defaultValue="om"
+                      options={propertyCountries}
+                      required
+                    />
+                    <Select
+                      register={register}
+                      errors={errors}
+                      id="state"
+                      label="Province/State"
+                      defaultValue="salalah"
+                      options={propertyStates}
+                      required
+                    />
                     <Input
+                      register={register}
+                      errors={errors}
                       id="address"
                       label="Full Address"
                       required
                       type="text"
                       placeholder="Enter property full address"
                     />
-                    <Input
-                      id="zip"
-                      label="Zip Code"
-                      required
-                      type="text"
-                      placeholder="Enter property zip code"
-                    />
-                    <fieldset className="box-fieldset">
-                      <label htmlFor="country">
-                        Country:<span>*</span>
-                      </label>
-                      <select className="nice-select">
-                        <option data-value={1} className="option selected">
-                          United States
-                        </option>
-                        <option data-value={2} className="option">
-                          United Kingdom
-                        </option>
-                        <option data-value={3} className="option">
-                          Russia
-                        </option>
-                      </select>
-                    </fieldset>
-                  </div>
-                  <div className="box grid-2 gap-30">
-                    <fieldset className="box-fieldset">
-                      <label htmlFor="state">
-                        Province/State:<span>*</span>
-                      </label>
-                      <select className="nice-select">
-                        <option data-value={1} className="option selected">
-                          None
-                        </option>
-                        <option data-value={2} className="option">
-                          Texas
-                        </option>
-                        <option data-value={3} className="option">
-                          New York
-                        </option>
-                      </select>
-                    </fieldset>
-                    <fieldset className="box-fieldset">
-                      <label htmlFor="neighborhood">
-                        Neighborhood:<span>*</span>
-                      </label>
-                      <select className="nice-select">
-                        <option data-value={1} className="option selected">
-                          None
-                        </option>
-                        <option data-value={2} className="option">
-                          Little Italy
-                        </option>
-                        <option data-value={3} className="option">
-                          Bedford Park
-                        </option>
-                      </select>
-                    </fieldset>
                   </div>
                   <div className="box box-fieldset mb-2">
                     <label htmlFor="location">
@@ -135,118 +209,39 @@ const StepperContainer = () => {
               </div>
               <div className="widget-box-2">
                 <h6 className="title">Addtional Information</h6>
-                <div className="box grid-3 gap-30">
-                  <fieldset className="box-fieldset">
-                    <label htmlFor="type">
-                      Property Type:<span>*</span>
-                    </label>
-                    <select className="nice-select">
-                      <option data-value={1} className="option">
-                        Apartment
-                      </option>
-                      <option data-value={2} className="option">
-                        Villa
-                      </option>
-                      <option data-value={3} className="option">
-                        Studio
-                      </option>
-                      <option data-value={4} className="option">
-                        Studio
-                      </option>
-                      <option data-value={5} className="option">
-                        Office
-                      </option>
-                      <option data-value={6} className="option">
-                        Townhouse
-                      </option>
-                    </select>
-                  </fieldset>
-                  <fieldset className="box-fieldset">
-                    <label htmlFor="status">
-                      Property Status:<span>*</span>
-                    </label>
-                    <select className="nice-select">
-                      <option data-value={1} className="option">
-                        For Rent
-                      </option>
-                      <option data-value={2} className="option">
-                        For Sale
-                      </option>
-                    </select>
-                  </fieldset>
-                  <fieldset className="box-fieldset">
-                    <label htmlFor="label">
-                      Property Label:<span>*</span>
-                    </label>
-                    <select className="nice-select">
-                      <option data-value={1} className="option">
-                        New Listing
-                      </option>
-                      <option data-value={2} className="option">
-                        Open House
-                      </option>
-                    </select>
-                  </fieldset>
+                <div className="box grid-2 gap-30 mb-2">
+                  <Input
+                    register={register}
+                    errors={errors}
+                    id="propertyId"
+                    label="Property ID"
+                    type="text"
+                  />
+                  <Input
+                    register={register}
+                    errors={errors}
+                    id="size"
+                    label="Size (SqFt)"
+                    type="text"
+                  />
                 </div>
-                <div className="box grid-3 gap-30">
-                  <fieldset className="box-fieldset">
-                    <label htmlFor="size">
-                      Size (SqFt):<span>*</span>
-                    </label>
-                    <input type="text" className="form-control style-1" />
-                  </fieldset>
-                  <fieldset className="box-fieldset">
-                    <label htmlFor="land">
-                      Land Area (SqFt):<span>*</span>
-                    </label>
-                    <input type="text" className="form-control style-1" />
-                  </fieldset>
-                  <fieldset className="box-fieldset">
-                    <label htmlFor="id">
-                      Property ID:<span>*</span>
-                    </label>
-                    <input type="text" className="form-control style-1" />
-                  </fieldset>
-                </div>
-                <div className="box grid-3 gap-30">
-                  <fieldset className="box-fieldset">
-                    <label htmlFor="rom">
-                      Rooms:<span>*</span>
-                    </label>
-                    <input type="text" className="form-control style-1" />
-                  </fieldset>
-                  <fieldset className="box-fieldset">
-                    <label htmlFor="bedrooms">
-                      Bedrooms:<span>*</span>
-                    </label>
-                    <input type="text" className="form-control style-1" />
-                  </fieldset>
-                  <fieldset className="box-fieldset">
-                    <label htmlFor="bathrooms">
-                      Bathrooms:<span>*</span>
-                    </label>
-                    <input type="text" className="form-control style-1" />
-                  </fieldset>
-                </div>
-                <div className="box grid-3 gap-30">
-                  <fieldset className="box-fieldset">
-                    <label htmlFor="garages">
-                      Garages:<span>*</span>
-                    </label>
-                    <input type="text" className="form-control style-1" />
-                  </fieldset>
-                  <fieldset className="box-fieldset">
-                    <label htmlFor="garages-size">
-                      Garages Size (SqFt):<span>*</span>
-                    </label>
-                    <input type="text" className="form-control style-1" />
-                  </fieldset>
-                  <fieldset className="box-fieldset">
-                    <label htmlFor="year">
-                      Year Built:<span>*</span>
-                    </label>
-                    <input type="text" className="form-control style-1" />
-                  </fieldset>
+                <div className="box grid-2 gap-30 mb-2">
+                  <Input
+                    register={register}
+                    errors={errors}
+                    id="roomCount"
+                    label="Rooms"
+                    type="text"
+                    required
+                  />
+                  <Input
+                    register={register}
+                    errors={errors}
+                    id="bathroomCount"
+                    label="Bathrooms"
+                    type="text"
+                    required
+                  />
                 </div>
               </div>
               <div className="widget-box-2">
@@ -434,43 +429,24 @@ const StepperContainer = () => {
             <div className="widget-box-2">
               <h6 className="title">Pricing and Availability</h6>
               <div className="box-price-property">
-                <div className="box grid-2 gap-30">
+                <div className="box grid-2 gap-30 mb-2">
                   <Input
+                    register={register}
+                    errors={errors}
                     id="price"
                     label="Price"
                     type="text"
                     required
                     placeholder="Example value: 12345.67"
                   />
-                  <fieldset className="box-fieldset">
-                    <label htmlFor="neighborhood">
-                      Unit Price:<span>*</span>
-                    </label>
-                    <select className="nice-select">
-                      <option data-value={1} className="option selected">
-                        None
-                      </option>
-                      <option data-value={2} className="option">
-                        1000
-                      </option>
-                      <option data-value={3} className="option">
-                        2000
-                      </option>
-                    </select>
-                  </fieldset>
-                </div>
-                <div className="grid-2 gap-30">
-                  <Input
-                    id="price"
-                    label="Before Price Label"
-                    type="text"
-                    required
-                  />
-                  <Input
-                    id="price"
-                    label="After Price Label"
-                    type="text"
-                    required
+
+                  <Select
+                    register={register}
+                    errors={errors}
+                    id="rentCycle"
+                    label="Rent Cycle"
+                    defaultValue="year"
+                    options={rentCycles}
                   />
                 </div>
                 <fieldset className="box-cb d-flex align-items-center gap-6">
@@ -501,53 +477,11 @@ const StepperContainer = () => {
             <div>
               <div className="widget-box-2">
                 <h6 className="title">Upload Media</h6>
-                <div className="box-uploadfile text-center">
-                  <label className="uploadfile">
-                    <span className="icon icon-img-2" />
-                    <div className="btn-upload">
-                      <Link href="#" className="tf-btn primary">
-                        Choose Image
-                      </Link>
-                      <input type="file" className="ip-file" />
-                    </div>
-                    <p className="file-name fw-5">
-                      Or drop image here to upload
-                    </p>
-                  </label>
-                </div>
-              </div>
-              <div className="widget-box-2">
-                <h6 className="title">Virtual Tour 360</h6>
-                <div className="box-radio-check">
-                  <div className="fw-7">Virtual Tour Type:</div>
-                  <fieldset className="fieldset-radio">
-                    <input
-                      type="radio"
-                      className="tf-radio"
-                      name="radio"
-                      id="radio1"
-                    />
-                    <label htmlFor="radio1" className="text-radio">
-                      Embedded code
-                    </label>
-                  </fieldset>
-
-                  <fieldset className="fieldset-radio">
-                    <input
-                      type="radio"
-                      className="tf-radio"
-                      name="radio"
-                      id="radio2"
-                    />
-                    <label htmlFor="radio2" className="text-radio">
-                      Upload image
-                    </label>
-                  </fieldset>
-                </div>
-                <fieldset className="box-fieldset">
-                  <label htmlFor="embedded">Embedded Code Virtual 360</label>
-                  <textarea className="textarea" defaultValue={""} />
-                </fieldset>
+                <ImageUpload
+                  value={imageSrc}
+                  onChange={(value) => setCustomValue("imageSrc", value)}
+                />
+                {/* <SimpleImageUpload /> */}
               </div>
               <div className="widget-box-2">
                 <h6 className="title">Videos</h6>
@@ -598,7 +532,7 @@ const StepperContainer = () => {
                 className="tf-btn primary mx-2"
                 icon="pi pi-check"
                 iconPos="right"
-                onClick={() => stepperRef.current.nextCallback()}
+                onClick={handleSubmit(onSubmit)}
               />
             </div>
           </StepperPanel>

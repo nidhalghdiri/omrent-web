@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 
 interface InputProps {
   id: string;
@@ -8,6 +9,8 @@ interface InputProps {
   defaultValue?: string;
   required?: boolean;
   placeholder?: string;
+  register: UseFormRegister<FieldValues>;
+  errors: FieldErrors;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -17,6 +20,8 @@ const Input: React.FC<InputProps> = ({
   defaultValue,
   required,
   placeholder,
+  register,
+  errors,
 }) => {
   return (
     <fieldset className="box box-fieldset mb-2">
@@ -26,10 +31,10 @@ const Input: React.FC<InputProps> = ({
       {type === "textarea" ? (
         <textarea
           className="textarea-tinymce"
-          name="area"
           id={id}
           defaultValue={defaultValue || ""}
           placeholder={placeholder || ""}
+          {...register(id, { required })}
         />
       ) : (
         <input
@@ -38,8 +43,10 @@ const Input: React.FC<InputProps> = ({
           className="form-control style-1"
           defaultValue={defaultValue || ""}
           placeholder={placeholder || ""}
+          {...register(id, { required })}
         />
       )}
+      <span>{errors[id] && "ERROR"}</span>
     </fieldset>
   );
 };

@@ -103,14 +103,11 @@ const ListingClient: React.FC<ListingClientProps> = ({
           <Swiper {...swiperOptions} className="swiper-wrapper">
             <SwiperSlide>
               <Link
-                href="/images/banner/banner-property-1.jpg"
+                href={listing.imageSrc}
                 data-fancybox="gallery"
                 className="box-imgage-detail d-block"
               >
-                <img
-                  src="/images/banner/banner-property-1.jpg"
-                  alt="img-property"
-                />
+                <img src={listing.imageSrc} alt="img-property" />
               </Link>
             </SwiperSlide>
             <SwiperSlide>
@@ -156,11 +153,13 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 <Link href="#" className="flag-tag primary">
                   For Rent
                 </Link>
-                <h4 className="title link">Lakeview Haven, Lake Tahoe</h4>
+                <h4 className="title link">{listing.title}</h4>
               </div>
               <div className="box-price d-flex align-items-center">
-                <h4>$250,00</h4>
-                <span className="body-1 text-variant-1">/month</span>
+                <h4>${listing.price}</h4>
+                <span className="body-1 text-variant-1">
+                  /{listing.rentCycle}
+                </span>
               </div>
             </div>
             <div className="content-bottom">
@@ -168,21 +167,23 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 <div className="label">FEATUREs:</div>
                 <ul className="meta">
                   <li className="meta-item">
-                    <span className="icon icon-bed" /> 2 Bedroom
+                    <span className="icon icon-bed" /> {listing.roomCount}{" "}
+                    Bedroom
                   </li>
                   <li className="meta-item">
-                    <span className="icon icon-bathtub" /> 2 Bathroom
+                    <span className="icon icon-bathtub" />{" "}
+                    {listing.bathroomCount} Bathroom
                   </li>
                   <li className="meta-item">
-                    <span className="icon icon-ruler" /> 6,000 SqFT
+                    <span className="icon icon-ruler" /> {listing.size} SqFT
                   </li>
                 </ul>
               </div>
               <div className="info-box">
                 <div className="label">LOCATION:</div>
                 <p className="meta-item">
-                  <span className="icon icon-mapPin" /> 8 Broadway, Brooklyn,
-                  New York
+                  <span className="icon icon-mapPin" /> {listing.address},
+                  {listing.state}
                 </p>
               </div>
               <ul className="icon-box">
@@ -208,12 +209,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
             <div className="col-lg-8">
               <div className="single-property-element single-property-desc">
                 <div className="h7 title fw-7">Description</div>
-                <p className="body-2 text-variant-1">
-                  Located around an hour away from Paris, between the Perche and
-                  the Iton valley, in a beautiful wooded park bordered by a
-                  charming stream, this country property immediately seduces
-                  with its bucolic and soothing environment.
-                </p>
+                <p className="body-2 text-variant-1">{listing.description}</p>
                 <p className="mt-8 body-2 text-variant-1">
                   An ideal choice for sports and leisure enthusiasts who will be
                   able to take advantage of its swimming pool (11m x 5m), tennis
@@ -232,7 +228,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                     </Link>
                     <div className="content">
                       <span className="label">ID:</span>
-                      <span>2297</span>
+                      <span>{listing.propertyId}</span>
                     </div>
                   </li>
                   <li className="item">
@@ -241,7 +237,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                     </Link>
                     <div className="content">
                       <span className="label">Type:</span>
-                      <span>House</span>
+                      <span>{listing.type}</span>
                     </div>
                   </li>
                   <li className="item">
@@ -250,7 +246,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                     </Link>
                     <div className="content">
                       <span className="label">Bedrooms:</span>
-                      <span>2 Rooms</span>
+                      <span>{listing.roomCount} Rooms</span>
                     </div>
                   </li>
                   <li className="item">
@@ -259,7 +255,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                     </Link>
                     <div className="content">
                       <span className="label">Bathrooms:</span>
-                      <span>2 Rooms</span>
+                      <span>{listing.bathroomCount} Rooms</span>
                     </div>
                   </li>
                   <li className="item">
@@ -268,7 +264,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                     </Link>
                     <div className="content">
                       <span className="label">Garages:</span>
-                      <span>2 Rooms</span>
+                      <span>0 Rooms</span>
                     </div>
                   </li>
                   <li className="item">
@@ -277,7 +273,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                     </Link>
                     <div className="content">
                       <span className="label">Size:</span>
-                      <span>900 SqFt</span>
+                      <span>{listing.size} SqFt</span>
                     </div>
                   </li>
                   <li className="item">
@@ -313,22 +309,22 @@ const ListingClient: React.FC<ListingClientProps> = ({
                   <div className="col-md-6">
                     <div className="inner-box">
                       <span className="label">Property ID:</span>
-                      <div className="content fw-7">AVT1020</div>
+                      <div className="content fw-7">{listing.propertyId}</div>
                     </div>
                   </div>
                   <div className="col-md-6">
                     <div className="inner-box">
                       <span className="label">Bedrooms:</span>
-                      <div className="content fw-7">4</div>
+                      <div className="content fw-7">{listing.roomCount}</div>
                     </div>
                   </div>
                   <div className="col-md-6">
                     <div className="inner-box">
                       <span className="label">Price:</span>
                       <div className="content fw-7">
-                        $250,00
+                        ${listing.price}
                         <span className="caption-1 fw-4 text-variant-1">
-                          /month
+                          /{listing.rentCycle}
                         </span>
                       </div>
                     </div>
@@ -336,19 +332,21 @@ const ListingClient: React.FC<ListingClientProps> = ({
                   <div className="col-md-6">
                     <div className="inner-box">
                       <span className="label">Bedrooms:</span>
-                      <div className="content fw-7">1</div>
+                      <div className="content fw-7">{listing.roomCount}</div>
                     </div>
                   </div>
                   <div className="col-md-6">
                     <div className="inner-box">
                       <span className="label">Property Size:</span>
-                      <div className="content fw-7">1200 SqFt</div>
+                      <div className="content fw-7">{listing.size} SqFt</div>
                     </div>
                   </div>
                   <div className="col-md-6">
                     <div className="inner-box">
                       <span className="label">Bathsrooms:</span>
-                      <div className="content fw-7">1</div>
+                      <div className="content fw-7">
+                        {listing.bathroomCount}
+                      </div>
                     </div>
                   </div>
                   <div className="col-md-6">
@@ -360,19 +358,21 @@ const ListingClient: React.FC<ListingClientProps> = ({
                   <div className="col-md-6">
                     <div className="inner-box">
                       <span className="label">Bathsrooms:</span>
-                      <div className="content fw-7">3</div>
+                      <div className="content fw-7">
+                        {listing.bathroomCount}
+                      </div>
                     </div>
                   </div>
                   <div className="col-md-6">
                     <div className="inner-box">
                       <span className="label">Property Type:</span>
-                      <div className="content fw-7">House, Apartment</div>
+                      <div className="content fw-7">{listing.type}</div>
                     </div>
                   </div>
                   <div className="col-md-6">
                     <div className="inner-box">
                       <span className="label">Garage:</span>
-                      <div className="content fw-7">1</div>
+                      <div className="content fw-7">0</div>
                     </div>
                   </div>
                   <div className="col-md-6">
@@ -384,7 +384,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                   <div className="col-md-6">
                     <div className="inner-box">
                       <span className="label">Garage Size:</span>
-                      <div className="content fw-7">1200 SqFt</div>
+                      <div className="content fw-7">0 SqFt</div>
                     </div>
                   </div>
                 </div>
@@ -472,7 +472,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                   <li>
                     <div className="fw-7">Address</div>
                     <span className="mt-4 text-variant-1">
-                      8 Broadway, Brooklyn, New York
+                      {listing.address}, {listing.state}
                     </span>
                   </li>
                   <li>
