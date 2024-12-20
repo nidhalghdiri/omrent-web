@@ -57,10 +57,10 @@ const StepperContainer = () => {
   } = useForm<FieldValues>({
     defaultValues: {
       title: "",
-      type: "",
+      type: "apartment",
       description: "",
-      country: "",
-      state: "",
+      country: "om",
+      state: "salalah",
       address: "",
       location: null,
       propertyId: "",
@@ -68,7 +68,7 @@ const StepperContainer = () => {
       roomCount: 1,
       bathroomCount: 1,
       price: 0,
-      rentCycle: "",
+      rentCycle: "year",
       guestCount: 1,
       imageSrc: "",
     },
