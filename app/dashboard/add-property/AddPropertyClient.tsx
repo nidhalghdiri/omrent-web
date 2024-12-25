@@ -17,7 +17,7 @@ const AddPropertyClient: React.FC<AddPropertyClientProps> = ({
       <div className="main-content">
         <div className="main-content-inner d-flex">
           <SideBarMenu />
-          <div className="w-100  m-2">
+          <div className="w-100  mx-2">
             <StepperContainer />
           </div>
         </div>

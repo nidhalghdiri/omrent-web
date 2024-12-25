@@ -10419,5 +10419,12 @@ tr {
 .p-stepper .p-stepper-header:has(~ .p-highlight) .p-stepper-separator {
   background-color: #eb5e55;
 }
+.p-stepper .p-stepper-header .p-stepper-action .p-stepper-number{
+  min-width: 2.714rem;
+  height: 2.714rem;
+}
+.p-stepper-title{
+  margin: 0rem 0.5rem !important;
+}
 
 /*# sourceMappingURL=styles.css.map */

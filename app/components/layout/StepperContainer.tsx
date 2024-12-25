@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { PrimeReactProvider } from "primereact/api";
 import { Stepper } from "primereact/stepper";
 import { StepperPanel } from "primereact/stepperpanel";
-import { Button } from "primereact/button";
 import Link from "next/link";
 import "@/node_modules/primereact/resources/themes/mdc-light-indigo/theme.css";
 import "@/node_modules/primereact/resources/primereact.min.css";
@@ -12,10 +11,11 @@ import Input from "../inputs/Input";
 import Select from "../inputs/Select";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import ImageUpload from "../inputs/ImageUpload";
-import SimpleImageUpload from "../inputs/SimpleImageUpload";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import NavigationButtons from "../buttons/NavigationButtons";
 
 const propertyTypes = [
   { value: "apartment", text: "Apartment" },
@@ -99,7 +99,7 @@ const StepperContainer = () => {
         reset();
       })
       .catch(() => {
-        toast.error("Somthing went wrong.");
+        // toast.error("Somthing went wrong.");
       })
       .finally(() => {
         setIsLoading(false);
@@ -149,12 +149,12 @@ const StepperContainer = () => {
               </div>
             </div>
             <div className="flex pt-4 justify-content-end">
-              <Button
-                label="Next"
-                icon="pi pi-arrow-right"
-                className="tf-btn primary mx-2"
-                iconPos="right"
-                onClick={() => stepperRef.current.nextCallback()}
+              <NavigationButtons
+                isFirstStep
+                onNext={() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  stepperRef.current.nextCallback();
+                }}
               />
             </div>
           </StepperPanel>
@@ -407,19 +407,15 @@ const StepperContainer = () => {
               </div>
             </div>
             <div className="flex pt-4 justify-content-between">
-              <Button
-                label="Back"
-                severity="secondary"
-                className="tf-btn secondary"
-                icon="pi pi-arrow-left"
-                onClick={() => stepperRef.current.prevCallback()}
-              />
-              <Button
-                label="Next"
-                icon="pi pi-arrow-right"
-                className="tf-btn primary mx-2"
-                iconPos="right"
-                onClick={() => stepperRef.current.nextCallback()}
+              <NavigationButtons
+                onBack={() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  stepperRef.current.prevCallback();
+                }}
+                onNext={() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  stepperRef.current.nextCallback();
+                }}
               />
             </div>
           </StepperPanel>
@@ -456,62 +452,81 @@ const StepperContainer = () => {
               </div>
             </div>
             <div className="flex pt-4 justify-content-start">
-              <Button
-                label="Back"
-                severity="secondary"
-                className="tf-btn secondary"
-                icon="pi pi-arrow-left"
-                onClick={() => stepperRef.current.prevCallback()}
-              />
-              <Button
-                label="Next"
-                icon="pi pi-arrow-right"
-                className="tf-btn primary mx-2"
-                iconPos="right"
-                onClick={() => stepperRef.current.nextCallback()}
+              <NavigationButtons
+                onBack={() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  stepperRef.current.prevCallback();
+                }}
+                onNext={() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  stepperRef.current.nextCallback();
+                }}
               />
             </div>
           </StepperPanel>
           {/* Placeholder for Step 4 */}
           <StepperPanel header="Upload Media">
             <div>
+              {/* Thumbnail Upload */}
               <div className="widget-box-2">
-                <h6 className="title">Upload Media</h6>
+                <h6 className="title">Thumbnail Image</h6>
                 <ImageUpload
                   value={imageSrc}
-                  onChange={(value) => setCustomValue("imageSrc", value)}
+                  onChange={(value) => setCustomValue("thumbnailSrc", value)}
+                  maxFiles={1}
+                  label="Upload a single thumbnail image"
                 />
-                {/* <SimpleImageUpload /> */}
               </div>
+
+              {/* Gallery Upload */}
+              <div className="widget-box-2">
+                <h6 className="title">Gallery Images</h6>
+                <ImageUpload
+                  value={imageSrc}
+                  onChange={(value) => setCustomValue("galleryImages", value)}
+                  maxFiles={10} // Limit to 10 gallery images
+                  multiple
+                  label="Upload multiple gallery images"
+                />
+              </div>
+
+              {/* Video URL Input */}
               <div className="widget-box-2">
                 <h6 className="title">Videos</h6>
                 <fieldset className="box-fieldset">
                   <label htmlFor="video">Video URL:</label>
                   <input
                     type="text"
+                    id="video"
                     className="form-control style-1"
-                    placeholder="Youtube, vimeo url"
+                    placeholder="Youtube, Vimeo URL"
+                    value={""}
+                    onChange={(e) => setCustomValue("videoUrl", e.target.value)}
                   />
                 </fieldset>
               </div>
             </div>
+
+            {/* Navigation Buttons */}
             <div className="flex pt-4 justify-content-start">
-              <Button
-                label="Back"
-                severity="secondary"
-                className="tf-btn secondary"
-                icon="pi pi-arrow-left"
-                onClick={() => stepperRef.current.prevCallback()}
-              />
-              <Button
-                label="Next"
-                icon="pi pi-arrow-right"
-                className="tf-btn primary mx-2"
-                iconPos="right"
-                onClick={() => stepperRef.current.nextCallback()}
+              <NavigationButtons
+                onBack={() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  stepperRef.current.prevCallback();
+                }}
+                onNext={() => {
+                  // Validate media before moving forward
+                  if (!imageSrc) {
+                    alert("Please upload a thumbnail image before proceeding.");
+                    return;
+                  }
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  stepperRef.current.nextCallback();
+                }}
               />
             </div>
           </StepperPanel>
+
           {/* Placeholder for Step 5 */}
           <StepperPanel header="Publish">
             <div className="flex flex-column h-12rem">
@@ -520,20 +535,7 @@ const StepperContainer = () => {
               </div>
             </div>
             <div className="flex pt-4 justify-content-start">
-              <Button
-                label="Back"
-                severity="secondary"
-                className="tf-btn secondary"
-                icon="pi pi-arrow-left"
-                onClick={() => stepperRef.current.prevCallback()}
-              />
-              <Button
-                label="Publish"
-                className="tf-btn primary mx-2"
-                icon="pi pi-check"
-                iconPos="right"
-                onClick={handleSubmit(onSubmit)}
-              />
+              <NavigationButtons onNext={handleSubmit(onSubmit)} isLastStep />
             </div>
           </StepperPanel>
         </Stepper>

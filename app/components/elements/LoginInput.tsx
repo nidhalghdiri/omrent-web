@@ -36,7 +36,7 @@ const LoginInput: React.FC<LoginInputProps> = ({
             id={id}
             type={type}
             className={`form-contact style-1 password-field`}
-            {...register(id, { required })}
+            {...register(id, { required: "Password is required" })}
             // ${errors[id] ? "border-rose-500" : "border-neutral-300"}
           />
           <span className="show-pass">
@@ -50,7 +50,7 @@ const LoginInput: React.FC<LoginInputProps> = ({
           id={id}
           type={type}
           className={`form-contact style-1`}
-          {...register(id, { required })}
+          {...register(id, { required: "Email is required" })}
           placeholder={defaultValue}
           // ${errors[id] ? "border-rose-500" : "border-neutral-300"}
         />

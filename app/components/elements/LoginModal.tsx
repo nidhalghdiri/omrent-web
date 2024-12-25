@@ -1,15 +1,21 @@
 "use client";
 import React, { useCallback } from "react";
 import Input from "./LoginInput";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import {
+  FieldErrors,
+  FieldValues,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
 import { signIn } from "next-auth/react";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import Modal from "../layout/Modal";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import Button from "../buttons/Button";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LoginModal = () => {
   const router = useRouter();
@@ -39,6 +45,14 @@ const LoginModal = () => {
         console.log("OnSubmit Data", "callback Error: " + callback.error);
         toast.error(callback.error);
       }
+    });
+  };
+  const onError = (errors: FieldErrors) => {
+    // Iterate over all errors and show individual error toast for each
+    console.log("my Errors", errors);
+    Object.values(errors).forEach((error: any) => {
+      const errorMessage = error?.message || "Something went wrong";
+      toast.error(errorMessage);
     });
   };
   const toggle = useCallback(() => {
@@ -90,7 +104,7 @@ const LoginModal = () => {
       {/* <button className="tf-btn primary w-100" onClick={handleSubmit(onSubmit)}>
         Login
       </button> */}
-      <Button title="Login" handleSubmit={handleSubmit(onSubmit)} />
+      <Button title="Login" handleSubmit={handleSubmit(onSubmit, onError)} />
       <div className="mt-12 text-variant-1 text-center noti">
         Not registered yet?
         <a onClick={toggle} className="text-black fw-5">
@@ -101,12 +115,14 @@ const LoginModal = () => {
   );
 
   return (
-    <Modal
-      isOpen={loginModal.isOpen}
-      title="Log In"
-      body={bodyContent}
-      onClose={loginModal.onClose}
-    />
+    <>
+      <Modal
+        isOpen={loginModal.isOpen}
+        title="Log In"
+        body={bodyContent}
+        onClose={loginModal.onClose}
+      />
+    </>
   );
 };
 

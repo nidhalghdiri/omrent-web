@@ -54,7 +54,11 @@ const Header: React.FC<HeaderProps> = ({
         </ul>
       </div>
       <div className="flat-bt-top">
-        <Button title="Submit Property" link href="/dashboard/add-property" />
+        {currentUser ? (
+          <Button title="Submit Property" link href="/dashboard/add-property" />
+        ) : (
+          <Button title="Submit Property" handleSubmit={loginModal.onOpen} />
+        )}
       </div>
     </div>
   );
@@ -104,7 +108,15 @@ const Header: React.FC<HeaderProps> = ({
         </div>
 
         <div className="flat-bt-top">
-          <Button title="Submit Property" link href="/dashboard/add-property" />
+          {currentUser ? (
+            <Button
+              title="Submit Property"
+              link
+              href="/dashboard/add-property"
+            />
+          ) : (
+            <Button title="Submit Property" handleSubmit={loginModal.onOpen} />
+          )}
         </div>
       </div>
     );
@@ -208,20 +220,27 @@ const Header: React.FC<HeaderProps> = ({
               {mobileLoginInfo}
               <MobileMenu handleMobileMenu={handleMobileMenu} />
               <div className="button-mobi-sell">
-                <Button
-                  title="Submit Property"
-                  link
-                  href="/dashboard/add-property"
-                />
+                {currentUser ? (
+                  <Button
+                    title="Submit Property"
+                    link
+                    href="/dashboard/add-property"
+                  />
+                ) : (
+                  <Button
+                    title="Submit Property"
+                    handleSubmit={loginModal.onOpen}
+                  />
+                )}
               </div>
               <div className="mobi-icon-box">
                 <div className="box d-flex align-items-center">
                   <span className="icon icon-phone2" />
-                  <div>1-333-345-6868</div>
+                  <div>00-968-7705-0604</div>
                 </div>
                 <div className="box d-flex align-items-center">
                   <span className="icon icon-mail" />
-                  <div>themesflat@gmail.com</div>
+                  <div>Ghdiri.nidhal@gmail.com</div>
                 </div>
               </div>
             </div>

@@ -5,10 +5,11 @@ import useRegisterModal from "@/app/hooks/useRegisterModal";
 import axios from "axios";
 import { useCallback, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import Input from "./LoginInput";
 import Link from "next/link";
 import Modal from "../layout/Modal";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const RegisterModal = () => {
   const registerModal = useRegisterModal();
