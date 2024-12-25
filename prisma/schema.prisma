@@ -63,7 +63,8 @@ model Listing {
   bathroomCount Int
   price Int
   rentCycle String // new
-  imageSrc String
+  thumbnailSrc String
+  galleryImages String[]
   createdAt DateTime @default(now())
   category String
   guestCount Int

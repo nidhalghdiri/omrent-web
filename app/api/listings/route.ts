@@ -24,7 +24,8 @@ export async function POST(request: Request) {
     price,
     rentCycle,
     guestCount,
-    imageSrc,
+    thumbnailSrc,
+    galleryImages,
   } = body;
   try {
     const listing = await prisma.listing.create({
@@ -39,7 +40,10 @@ export async function POST(request: Request) {
         roomCount: parseInt(roomCount, 10),
         bathroomCount: parseInt(bathroomCount, 10),
         rentCycle,
-        imageSrc,
+        thumbnailSrc,
+        galleryImages: {
+          set: galleryImages, // Store multiple image URLs
+        },
         category: "",
         guestCount,
         locationValue: location ?? "Unknown",

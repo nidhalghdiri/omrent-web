@@ -25,11 +25,11 @@ const ListingCard: React.FC<ListingCardProps> = ({
             <div className="images-style">
               <Image
                 alt="listing"
-                src={listing.imageSrc}
+                src={listing.thumbnailSrc}
                 width={600}
                 height={400}
               />
-              {/* <img src={listing.imageSrc} alt="img" /> */}
+              {/* <img src={listing.thumbnailSrc} alt="img" /> */}
             </div>
             <div className="top">
               <ul className="d-flex gap-8 flex-column">

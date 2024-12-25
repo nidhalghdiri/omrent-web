@@ -70,13 +70,25 @@ const StepperContainer = () => {
       price: 0,
       rentCycle: "year",
       guestCount: 1,
-      imageSrc: "",
+      thumbnailSrc: "",
+      galleryImages: [],
     },
   });
-  const imageSrc = watch("imageSrc");
+  const thumbnailSrc = watch("thumbnailSrc");
+  const galleryImages = watch("galleryImages");
   const setCustomValue = (id: string, value: any) => {
-    console.log(`Setting ${id} to`, value);
-    setValue(id, value, { shouldValidate: true });
+    if (id === "galleryImages") {
+      // Append new image(s) to the existing array
+      const currentImages = watch("galleryImages") || [];
+      const updatedImages = Array.isArray(value)
+        ? [...currentImages, ...value] // If multiple files are uploaded
+        : [...currentImages, value]; // If a single file is uploaded
+      setValue(id, updatedImages, { shouldValidate: true });
+    } else {
+      // Handle other fields normally
+      setValue(id, value, { shouldValidate: true });
+    }
+    console.log(`Setting ${id} to`, watch(id)); // Log updated value
   };
   // Submission Handler
   const onSubmit = (data: FieldValues) => {
@@ -89,6 +101,8 @@ const StepperContainer = () => {
       price: parseInt(data.price, 10),
       state: data.state || "Unknown", // Default value
       location: data.location || "Unknown", // Default value
+      thumbnailSrc: data.thumbnailSrc, // Store Cloudinary URL
+      galleryImages: data.galleryImages,
     };
     console.log("validated Data:", validatedData);
     axios
@@ -471,7 +485,7 @@ const StepperContainer = () => {
               <div className="widget-box-2">
                 <h6 className="title">Thumbnail Image</h6>
                 <ImageUpload
-                  value={imageSrc}
+                  value={thumbnailSrc}
                   onChange={(value) => setCustomValue("thumbnailSrc", value)}
                   maxFiles={1}
                   label="Upload a single thumbnail image"
@@ -482,10 +496,9 @@ const StepperContainer = () => {
               <div className="widget-box-2">
                 <h6 className="title">Gallery Images</h6>
                 <ImageUpload
-                  value={imageSrc}
+                  value={galleryImages}
                   onChange={(value) => setCustomValue("galleryImages", value)}
                   maxFiles={10} // Limit to 10 gallery images
-                  multiple
                   label="Upload multiple gallery images"
                 />
               </div>
@@ -515,11 +528,6 @@ const StepperContainer = () => {
                   stepperRef.current.prevCallback();
                 }}
                 onNext={() => {
-                  // Validate media before moving forward
-                  if (!imageSrc) {
-                    alert("Please upload a thumbnail image before proceeding.");
-                    return;
-                  }
                   window.scrollTo({ top: 0, behavior: "smooth" });
                   stepperRef.current.nextCallback();
                 }}

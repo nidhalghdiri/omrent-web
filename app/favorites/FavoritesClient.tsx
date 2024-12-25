@@ -35,7 +35,7 @@ const FavoritesClient: React.FC<FavoritesClientProps> = ({
                           <td>
                             <div className="listing-box">
                               <div className="images">
-                                <img src={listing.imageSrc} alt="images" />
+                                <img src={listing.thumbnailSrc} alt="images" />
                               </div>
                               <div className="content">
                                 <div className="title">

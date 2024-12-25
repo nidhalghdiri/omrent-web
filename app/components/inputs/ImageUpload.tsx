@@ -10,16 +10,16 @@ declare global {
 
 interface ImageUploadProps {
   onChange: (value: string | string[]) => void;
-  label: string;
-  value: string;
-  maxFiles: number;
+  label?: string;
+  value: string | string[];
+  maxFiles?: number;
   multiple?: boolean;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
   label,
   value,
-  maxFiles,
+  maxFiles = 1,
   multiple,
   onChange,
 }) => {
@@ -76,7 +76,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                     key={index}
                     src={src}
                     alt={`Uploaded ${index + 1}`}
-                    style={{ maxWidth: "100%", height: "auto", margin: "5px" }}
+                    style={{ maxWidth: "50%", height: "auto", margin: "5px" }}
                   />
                 ))}
               </div>
@@ -84,7 +84,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               <img
                 src={value}
                 alt="Uploaded"
-                style={{ maxWidth: "100%", height: "auto" }}
+                style={{ maxWidth: "50%", height: "auto" }}
               />
             )}
           </div>

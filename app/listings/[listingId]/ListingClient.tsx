@@ -79,6 +79,51 @@ const swiperOptions2 = {
     },
   },
 };
+const swiperOptions3 = (galleryLength: number) => ({
+  modules: [Autoplay, Pagination, Navigation],
+  autoplay:
+    galleryLength > 1
+      ? {
+          delay: 2000,
+          disableOnInteraction: false,
+        }
+      : false, // Disable autoplay for single-image galleries
+  speed: 1200, // Slightly reduced speed for a smoother experience
+  navigation:
+    galleryLength > 1
+      ? {
+          clickable: true,
+          nextEl: ".nav-prev-location",
+          prevEl: ".nav-next-location",
+        }
+      : false, // Disable navigation for single-image galleries
+  pagination: {
+    el: ".swiper-pagination1",
+    clickable: true,
+    dynamicBullets: galleryLength > 1, // Enable dynamic bullets for multi-image galleries
+  },
+  slidesPerView: galleryLength > 1 ? 1 : "auto", // Center a single image
+  loop: galleryLength > 1, // Disable looping for single-image galleries
+  spaceBetween: galleryLength > 1 ? 20 : 0, // No spacing needed for single-image galleries
+  centeredSlides: galleryLength > 1, // Center slides only for multiple images
+  breakpoints: {
+    600: {
+      slidesPerView: galleryLength > 1 ? 2 : 1,
+      spaceBetween: galleryLength > 1 ? 20 : 0,
+      centeredSlides: galleryLength > 1 ? false : true,
+    },
+    991: {
+      slidesPerView: galleryLength > 1 ? 2 : 1,
+      spaceBetween: galleryLength > 1 ? 20 : 0,
+      centeredSlides: galleryLength > 1 ? false : true,
+    },
+    1520: {
+      slidesPerView: galleryLength > 1 ? 2.03 : 1,
+      spaceBetween: galleryLength > 1 ? 20 : 0,
+      centeredSlides: galleryLength > 1 ? false : true,
+    },
+  },
+});
 
 interface ListingClientProps {
   currentUser: SafeUser | null;
@@ -100,40 +145,33 @@ const ListingClient: React.FC<ListingClientProps> = ({
     <>
       <section className="flat-location flat-slider-detail-v1">
         <div className="swiper tf-sw-location">
-          <Swiper {...swiperOptions} className="swiper-wrapper">
+          <Swiper
+            {...(swiperOptions3(listing.galleryImages?.length || 0) as object)}
+            className="swiper-wrapper"
+          >
+            {/* Display the thumbnail image */}
             <SwiperSlide>
               <Link
-                href={listing.imageSrc}
+                href={listing.thumbnailSrc}
                 data-fancybox="gallery"
                 className="box-imgage-detail d-block"
               >
-                <img src={listing.imageSrc} alt="img-property" />
+                <img src={listing.thumbnailSrc} alt="Thumbnail of property" />
               </Link>
             </SwiperSlide>
-            <SwiperSlide>
-              <Link
-                href="/images/banner/banner-property-2.jpg"
-                data-fancybox="gallery"
-                className="box-imgage-detail d-block"
-              >
-                <img
-                  src="/images/banner/banner-property-2.jpg"
-                  alt="img-property"
-                />
-              </Link>
-            </SwiperSlide>
-            <SwiperSlide>
-              <Link
-                href="/images/banner/banner-property-3.jpg"
-                data-fancybox="gallery"
-                className="box-imgage-detail d-block"
-              >
-                <img
-                  src="/images/banner/banner-property-3.jpg"
-                  alt="img-property"
-                />
-              </Link>
-            </SwiperSlide>
+
+            {/* Map through gallery images */}
+            {listing.galleryImages?.map((imageSrc, index) => (
+              <SwiperSlide key={index}>
+                <Link
+                  href={imageSrc}
+                  data-fancybox="gallery"
+                  className="box-imgage-detail d-block"
+                >
+                  <img src={imageSrc} alt={`Gallery image ${index + 1}`} />
+                </Link>
+              </SwiperSlide>
+            ))}
           </Swiper>
           <div className="box-navigation">
             <div className="navigation swiper-nav-next nav-next-location">
@@ -210,11 +248,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
               <div className="single-property-element single-property-desc">
                 <div className="h7 title fw-7">Description</div>
                 <p className="body-2 text-variant-1">{listing.description}</p>
-                <p className="mt-8 body-2 text-variant-1">
-                  An ideal choice for sports and leisure enthusiasts who will be
-                  able to take advantage of its swimming pool (11m x 5m), tennis
-                  court, gym and sauna.
-                </p>
+                <p className="mt-8 body-2 text-variant-1"></p>
                 <Link href="#" className="btn-view">
                   <span className="text">View More</span>{" "}
                 </Link>
@@ -485,160 +519,6 @@ const ListingClient: React.FC<ListingClientProps> = ({
                   </li>
                 </ul>
               </div>
-              <div className="single-property-element single-property-floor">
-                <div className="h7 title fw-7">Floor plans</div>
-                <ul className="box-floor" id="parent-floor">
-                  <li className="floor-item" onClick={() => handleAccordion(1)}>
-                    <div
-                      className={`${
-                        isAccordion == 1
-                          ? "floor-header"
-                          : "floor-header collapsed"
-                      }`}
-                    >
-                      <div className="inner-left">
-                        <i className="icon icon-arr-r" />
-                        <span className="fw-7">First Floor</span>
-                      </div>
-                      <ul className="inner-right">
-                        <li className="d-flex align-items-center gap-8">
-                          <i className="icon icon-bed" />2 Bedroom
-                        </li>
-                        <li className="d-flex align-items-center gap-8">
-                          <i className="icon icon-bathtub" />2 Bathroom
-                        </li>
-                      </ul>
-                    </div>
-                    <div
-                      id="floor-one"
-                      className={`${
-                        isAccordion == 1 ? "collapse show" : "collapse"
-                      }`}
-                      data-bs-parent="#parent-floor"
-                    >
-                      <div className="faq-body">
-                        <div className="box-img">
-                          <img src="/images/banner/floor.png" alt="img-floor" />
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="floor-item" onClick={() => handleAccordion(2)}>
-                    <div
-                      className={`${
-                        isAccordion == 2
-                          ? "floor-header"
-                          : "floor-header collapsed"
-                      }`}
-                    >
-                      <div className="inner-left">
-                        <i className="icon icon-arr-r" />
-                        <span className="fw-7">Second Floor</span>
-                      </div>
-                      <ul className="inner-right">
-                        <li className="d-flex align-items-center gap-8">
-                          <i className="icon icon-bed" />2 Bedroom
-                        </li>
-                        <li className="d-flex align-items-center gap-8">
-                          <i className="icon icon-bathtub" />2 Bathroom
-                        </li>
-                      </ul>
-                    </div>
-                    <div
-                      id="floor-two"
-                      className={`${
-                        isAccordion == 2 ? "collapse show" : "collapse"
-                      }`}
-                      data-bs-parent="#parent-floor"
-                    >
-                      <div className="faq-body">
-                        <div className="box-img">
-                          <img src="/images/banner/floor.png" alt="img-floor" />
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div className="single-property-element single-property-attachments">
-                <div className="h7 title fw-7">File Attachments</div>
-                <div className="row">
-                  <div className="col-sm-6">
-                    <Link href="#" target="_blank" className="attachments-item">
-                      <div className="box-icon w-60">
-                        <img src="/images/home/file-1.png" alt="file" />
-                      </div>
-                      <span>Villa-Document.pdf</span>
-                      <i className="icon icon-download" />
-                    </Link>
-                  </div>
-                  <div className="col-sm-6">
-                    <Link href="#" target="_blank" className="attachments-item">
-                      <div className="box-icon w-60">
-                        <img src="/images/home/file-2.png" alt="file" />
-                      </div>
-                      <span>Villa-Document.pdf</span>
-                      <i className="icon icon-download" />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-              <div className="single-property-element single-property-explore">
-                <div className="h7 title fw-7">Explore Property</div>
-                <div className="box-img">
-                  <img src="/images/banner/img-explore.jpg" alt="img" />
-                  <div className="box-icon w-80">
-                    <span className="icon icon-360" />
-                  </div>
-                </div>
-              </div>
-              <div className="single-property-element single-property-nearby">
-                <div className="h7 title fw-7">What’s nearby?</div>
-                <p className="body-2">
-                  Explore nearby amenities to precisely locate your property and
-                  identify surrounding conveniences, providing a comprehensive
-                  overview of the living environment and the property's
-                  convenience.
-                </p>
-                <div className="grid-2 box-nearby">
-                  <ul className="box-left">
-                    <li className="item-nearby">
-                      <span className="label">School:</span>
-                      <span className="fw-7">0.7 km</span>
-                    </li>
-                    <li className="item-nearby">
-                      <span className="label">University:</span>
-                      <span className="fw-7">1.3 km</span>
-                    </li>
-                    <li className="item-nearby">
-                      <span className="label">Grocery center:</span>
-                      <span className="fw-7">0.6 km</span>
-                    </li>
-                    <li className="item-nearby">
-                      <span className="label">Market:</span>
-                      <span className="fw-7">1.1 km</span>
-                    </li>
-                  </ul>
-                  <ul className="box-right">
-                    <li className="item-nearby">
-                      <span className="label">Hospital:</span>
-                      <span className="fw-7">0.4 km</span>
-                    </li>
-                    <li className="item-nearby">
-                      <span className="label">Metro station:</span>
-                      <span className="fw-7">1.8 km</span>
-                    </li>
-                    <li className="item-nearby">
-                      <span className="label">Gym, wellness:</span>
-                      <span className="fw-7">1.3 km</span>
-                    </li>
-                    <li className="item-nearby">
-                      <span className="label">River:</span>
-                      <span className="fw-7">2.1 km</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
               <div className="single-property-element single-wrapper-review">
                 <div className="box-title-review d-flex justify-content-between align-items-center flex-wrap gap-20">
                   <div className="h7 fw-7">Guest Reviews</div>
@@ -725,168 +605,6 @@ const ListingClient: React.FC<ListingClientProps> = ({
                             </Link>
                           </li>
                         </ul>
-                      </div>
-                    </li>
-                    <li className="list-review-item">
-                      <div className="avatar avt-60 round">
-                        <img src="/images/avatar/avt-3.jpg" alt="avatar" />
-                      </div>
-                      <div className="content">
-                        <div className="name h7 fw-7 text-black">
-                          Viola Lucas
-                          <svg
-                            width={16}
-                            height={16}
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              clipRule="evenodd"
-                              d="M0 8C0 12.4112 3.5888 16 8 16C12.4112 16 16 12.4112 16 8C16 3.5888 12.4112 0 8 0C3.5888 0 0 3.5888 0 8ZM12.1657 6.56569C12.4781 6.25327 12.4781 5.74673 12.1657 5.43431C11.8533 5.1219 11.3467 5.1219 11.0343 5.43431L7.2 9.26863L5.36569 7.43431C5.05327 7.12189 4.54673 7.12189 4.23431 7.43431C3.9219 7.74673 3.9219 8.25327 4.23431 8.56569L6.63432 10.9657C6.94673 11.2781 7.45327 11.2781 7.76569 10.9657L12.1657 6.56569Z"
-                              fill="#198754"
-                            />
-                          </svg>
-                        </div>
-                        <span className="mt-4 d-inline-block  date body-3 text-variant-2">
-                          August 13, 2023
-                        </span>
-                        <ul className="mt-8 list-star">
-                          <li className="icon-star" />
-                          <li className="icon-star" />
-                          <li className="icon-star" />
-                          <li className="icon-star" />
-                          <li className="icon-star" />
-                        </ul>
-                        <p className="mt-12 body-2 text-black">
-                          It's really easy to use and it is exactly what I am
-                          looking for. A lot of good looking templates &amp;
-                          it's highly customizable. Live support is helpful,
-                          solved my issue in no time.
-                        </p>
-                      </div>
-                    </li>
-                    <li className="list-review-item">
-                      <div className="avatar avt-60 round">
-                        <img src="/images/avatar/avt-4.jpg" alt="avatar" />
-                      </div>
-                      <div className="content">
-                        <div className="name h7 fw-7 text-black">
-                          Darlene Robertson
-                          <svg
-                            width={16}
-                            height={16}
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              clipRule="evenodd"
-                              d="M0 8C0 12.4112 3.5888 16 8 16C12.4112 16 16 12.4112 16 8C16 3.5888 12.4112 0 8 0C3.5888 0 0 3.5888 0 8ZM12.1657 6.56569C12.4781 6.25327 12.4781 5.74673 12.1657 5.43431C11.8533 5.1219 11.3467 5.1219 11.0343 5.43431L7.2 9.26863L5.36569 7.43431C5.05327 7.12189 4.54673 7.12189 4.23431 7.43431C3.9219 7.74673 3.9219 8.25327 4.23431 8.56569L6.63432 10.9657C6.94673 11.2781 7.45327 11.2781 7.76569 10.9657L12.1657 6.56569Z"
-                              fill="#198754"
-                            />
-                          </svg>
-                        </div>
-                        <span className="mt-4 d-inline-block  date body-3 text-variant-2">
-                          August 13, 2023
-                        </span>
-                        <ul className="mt-8 list-star">
-                          <li className="icon-star" />
-                          <li className="icon-star" />
-                          <li className="icon-star" />
-                          <li className="icon-star" />
-                          <li className="icon-star" />
-                        </ul>
-                        <p className="mt-12 body-2 text-black">
-                          It's really easy to use and it is exactly what I am
-                          looking for. A lot of good looking templates &amp;
-                          it's highly customizable. Live support is helpful,
-                          solved my issue in no time.
-                        </p>
-                      </div>
-                    </li>
-                    <li className="list-review-item">
-                      <div className="avatar avt-60 round">
-                        <img src="/images/avatar/avt-2.jpg" alt="avatar" />
-                      </div>
-                      <div className="content">
-                        <div className="name h7 fw-7 text-black">
-                          Viola Lucas
-                          <svg
-                            width={16}
-                            height={16}
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              clipRule="evenodd"
-                              d="M0 8C0 12.4112 3.5888 16 8 16C12.4112 16 16 12.4112 16 8C16 3.5888 12.4112 0 8 0C3.5888 0 0 3.5888 0 8ZM12.1657 6.56569C12.4781 6.25327 12.4781 5.74673 12.1657 5.43431C11.8533 5.1219 11.3467 5.1219 11.0343 5.43431L7.2 9.26863L5.36569 7.43431C5.05327 7.12189 4.54673 7.12189 4.23431 7.43431C3.9219 7.74673 3.9219 8.25327 4.23431 8.56569L6.63432 10.9657C6.94673 11.2781 7.45327 11.2781 7.76569 10.9657L12.1657 6.56569Z"
-                              fill="#198754"
-                            />
-                          </svg>
-                        </div>
-                        <span className="mt-4 d-inline-block  date body-3 text-variant-2">
-                          August 13, 2023
-                        </span>
-                        <ul className="mt-8 list-star">
-                          <li className="icon-star" />
-                          <li className="icon-star" />
-                          <li className="icon-star" />
-                          <li className="icon-star" />
-                          <li className="icon-star" />
-                        </ul>
-                        <p className="mt-12 body-2 text-black">
-                          It's really easy to use and it is exactly what I am
-                          looking for. A lot of good looking templates &amp;
-                          it's highly customizable. Live support is helpful,
-                          solved my issue in no time.
-                        </p>
-                        <ul className="box-img-review">
-                          <li>
-                            <Link href="#" className="img-review">
-                              <img
-                                src="/images/blog/review1.jpg"
-                                alt="img-review"
-                              />
-                            </Link>
-                          </li>
-                          <li>
-                            <Link href="#" className="img-review">
-                              <img
-                                src="/images/blog/review2.jpg"
-                                alt="img-review"
-                              />
-                            </Link>
-                          </li>
-                          <li>
-                            <Link href="#" className="img-review">
-                              <img
-                                src="/images/blog/review3.jpg"
-                                alt="img-review"
-                              />
-                            </Link>
-                          </li>
-                          <li>
-                            <Link href="#" className="img-review">
-                              <img
-                                src="/images/blog/review4.jpg"
-                                alt="img-review"
-                              />
-                            </Link>
-                          </li>
-                          <li>
-                            <Link href="#" className="img-review">
-                              <span className="fw-7">+12</span>
-                            </Link>
-                          </li>
-                        </ul>
-                        <Link href="#" className="view-question">
-                          See more answered questions (719)
-                        </Link>
                       </div>
                     </li>
                   </ul>
