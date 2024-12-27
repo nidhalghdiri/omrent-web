@@ -19,6 +19,15 @@ export default async function getListingById(paramsPromise: Promise<IParams>) {
       },
       include: {
         user: true,
+        propertyAmenities: {
+          include: {
+            amenity: {
+              include: {
+                category: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -33,8 +42,16 @@ export default async function getListingById(paramsPromise: Promise<IParams>) {
         ...listing.user,
         createdAt: listing.user.createdAt.toISOString(),
         updatedAt: listing.user.updatedAt.toISOString(),
-        emailVerified: listing.user.emailVerified?.toISOString() || null,
+        emailVerified: listing.user.emailVerified || null,
       },
+      propertyAmenities: listing.propertyAmenities.map((pa) => ({
+        id: pa.id,
+        amenity: {
+          ...pa.amenity,
+          category: pa.amenity.category,
+        },
+        createdAt: pa.createdAt.toISOString(),
+      })),
     };
   } catch (error: any) {
     console.error("Error fetching listing by ID:", error);

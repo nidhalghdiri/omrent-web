@@ -16,6 +16,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NavigationButtons from "../buttons/NavigationButtons";
+import Button from "../buttons/Button";
+import { SafeAmenity, SafeAmenityCategory } from "@/app/types";
+import AmenitiesSection from "./AmenitiesSection";
 
 const propertyTypes = [
   { value: "apartment", text: "Apartment" },
@@ -41,7 +44,11 @@ const rentCycles = [
   { value: "day", text: "Daily" },
 ];
 
-const StepperContainer = () => {
+interface StepperContainerProps {
+  amenities: SafeAmenityCategory[];
+}
+
+const StepperContainer: React.FC<StepperContainerProps> = ({ amenities }) => {
   const stepperRef = React.useRef<any>(null);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -72,10 +79,12 @@ const StepperContainer = () => {
       guestCount: 1,
       thumbnailSrc: "",
       galleryImages: [],
+      amenities: [],
     },
   });
   const thumbnailSrc = watch("thumbnailSrc");
   const galleryImages = watch("galleryImages");
+  const selectedAmenities = watch("amenities");
   const setCustomValue = (id: string, value: any) => {
     if (id === "galleryImages") {
       // Append new image(s) to the existing array
@@ -89,6 +98,14 @@ const StepperContainer = () => {
       setValue(id, value, { shouldValidate: true });
     }
     console.log(`Setting ${id} to`, watch(id)); // Log updated value
+  };
+  const handleAmenityToggle = (id: string) => {
+    const currentAmenities = watch("amenities") || [];
+    const updatedAmenities = currentAmenities.includes(id)
+      ? currentAmenities.filter((amenityId: string) => amenityId !== id) // Deselect
+      : [...currentAmenities, id]; // Select
+    setValue("amenities", updatedAmenities, { shouldValidate: true });
+    console.log("Selected Amenities:", updatedAmenities); // Debugging
   };
   // Submission Handler
   const onSubmit = (data: FieldValues) => {
@@ -114,6 +131,69 @@ const StepperContainer = () => {
       })
       .catch(() => {
         // toast.error("Somthing went wrong.");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const saveAmenities = () => {
+    setIsLoading(true);
+
+    var data = {
+      categories: [
+        {
+          name: "Home safety",
+          amenities: [
+            { name: "Smoke alarm", icon: "icon-smoke-alarm" },
+            { name: "Carbon monoxide alarm", icon: "icon-carbon" },
+            { name: "First aid kit", icon: "icon-kit" },
+            { name: "Self check-in with lockbox", icon: "icon-lockbox" },
+            { name: "Security cameras", icon: "icon-security" },
+          ],
+        },
+        {
+          name: "Bedroom",
+          amenities: [
+            { name: "Hangers", icon: "icon-hanger" },
+            { name: "Bed linens", icon: "icon-bed-line" },
+            { name: "Extra pillows & blankets", icon: "icon-pillows" },
+            { name: "Iron", icon: "icon-iron" },
+            { name: "TV with standard cable", icon: "icon-tv" },
+          ],
+        },
+        {
+          name: "Kitchen",
+          amenities: [
+            { name: "Refrigerator", icon: "icon-refrigerator" },
+            { name: "Microwave", icon: "icon-microwave" },
+            { name: "Dishwasher", icon: "icon-microwave" },
+            { name: "Coffee maker", icon: "icon-coffee" },
+          ],
+        },
+      ],
+    };
+
+    // Validate and structure the data
+    const validatedData = {
+      categories: data.categories.map((category: any) => ({
+        name: category.name,
+        amenities: category.amenities.map((amenity: any) => ({
+          name: amenity.name,
+          icon: amenity.icon || null, // Default to null if icon is not provided
+        })),
+      })),
+    };
+
+    axios
+      .post("../api/amenities", validatedData)
+      .then(() => {
+        toast.success("Categories and amenities saved successfully!");
+        reset(); // Reset the form after successful submission
+      })
+      .catch((error) => {
+        console.error("Error saving categories and amenities:", error);
+        toast.error("Something went wrong.");
       })
       .finally(() => {
         setIsLoading(false);
@@ -258,167 +338,12 @@ const StepperContainer = () => {
                   />
                 </div>
               </div>
-              <div className="widget-box-2">
-                <h6 className="title">
-                  Amenities<span>*</span>
-                </h6>
-                <div className="box-amenities-property">
-                  <div className="box-amenities">
-                    <div className="title-amenities fw-7">Home safety:</div>
-                    <fieldset className="amenities-item">
-                      <input
-                        type="checkbox"
-                        className="tf-checkbox style-1 primary"
-                        id="cb1"
-                        defaultChecked
-                      />
-                      <label htmlFor="cb1" className="text-cb-amenities">
-                        Smoke alarm
-                      </label>
-                    </fieldset>
-                    <fieldset className="amenities-item">
-                      <input
-                        type="checkbox"
-                        className="tf-checkbox style-1 primary"
-                        id="cb2"
-                      />
-                      <label htmlFor="cb2" className="text-cb-amenities">
-                        Carbon monoxide alarm
-                      </label>
-                    </fieldset>
-                    <fieldset className="amenities-item">
-                      <input
-                        type="checkbox"
-                        className="tf-checkbox style-1 primary"
-                        id="cb3"
-                        defaultChecked
-                      />
-                      <label htmlFor="cb3" className="text-cb-amenities">
-                        First aid kit
-                      </label>
-                    </fieldset>
-                    <fieldset className="amenities-item">
-                      <input
-                        type="checkbox"
-                        className="tf-checkbox style-1 primary"
-                        id="cb4"
-                        defaultChecked
-                      />
-                      <label htmlFor="cb4" className="text-cb-amenities">
-                        Self check-in with lockbox
-                      </label>
-                    </fieldset>
-                    <fieldset className="amenities-item">
-                      <input
-                        type="checkbox"
-                        className="tf-checkbox style-1 primary"
-                        id="cb5"
-                      />
-                      <label htmlFor="cb5" className="text-cb-amenities">
-                        Security cameras
-                      </label>
-                    </fieldset>
-                  </div>
-                  <div className="box-amenities">
-                    <div className="title-amenities fw-7">Bedroom:</div>
-                    <fieldset className="amenities-item">
-                      <input
-                        type="checkbox"
-                        className="tf-checkbox style-1 primary"
-                        id="cb6"
-                      />
-                      <label htmlFor="cb6" className="text-cb-amenities">
-                        Hangers
-                      </label>
-                    </fieldset>
-                    <fieldset className="amenities-item">
-                      <input
-                        type="checkbox"
-                        className="tf-checkbox style-1 primary"
-                        id="cb7"
-                        defaultChecked
-                      />
-                      <label htmlFor="cb7" className="text-cb-amenities">
-                        Bed linens
-                      </label>
-                    </fieldset>
-                    <fieldset className="amenities-item">
-                      <input
-                        type="checkbox"
-                        className="tf-checkbox style-1 primary"
-                        id="cb8"
-                      />
-                      <label htmlFor="cb8" className="text-cb-amenities">
-                        Extra pillows &amp; blankets
-                      </label>
-                    </fieldset>
-                    <fieldset className="amenities-item">
-                      <input
-                        type="checkbox"
-                        className="tf-checkbox style-1 primary"
-                        id="cb9"
-                      />
-                      <label htmlFor="cb9" className="text-cb-amenities">
-                        Iron
-                      </label>
-                    </fieldset>
-                    <fieldset className="amenities-item">
-                      <input
-                        type="checkbox"
-                        className="tf-checkbox style-1 primary"
-                        id="cb10"
-                        defaultChecked
-                      />
-                      <label htmlFor="cb10" className="text-cb-amenities">
-                        TV with standard cable
-                      </label>
-                    </fieldset>
-                  </div>
-                  <div className="box-amenities">
-                    <div className="title-amenities fw-7">Kitchen:</div>
-                    <fieldset className="amenities-item">
-                      <input
-                        type="checkbox"
-                        className="tf-checkbox style-1 primary"
-                        id="cb11"
-                      />
-                      <label htmlFor="cb11" className="text-cb-amenities">
-                        Refrigerator
-                      </label>
-                    </fieldset>
-                    <fieldset className="amenities-item">
-                      <input
-                        type="checkbox"
-                        className="tf-checkbox style-1 primary"
-                        id="cb12"
-                      />
-                      <label htmlFor="cb12" className="text-cb-amenities">
-                        Microwave
-                      </label>
-                    </fieldset>
-                    <fieldset className="amenities-item">
-                      <input
-                        type="checkbox"
-                        className="tf-checkbox style-1 primary"
-                        id="cb13"
-                      />
-                      <label htmlFor="cb13" className="text-cb-amenities">
-                        Dishwasher
-                      </label>
-                    </fieldset>
-                    <fieldset className="amenities-item">
-                      <input
-                        type="checkbox"
-                        className="tf-checkbox style-1 primary"
-                        id="cb14"
-                      />
-                      <label htmlFor="cb14" className="text-cb-amenities">
-                        Coffee maker
-                      </label>
-                    </fieldset>
-                  </div>
-                </div>
-              </div>
+              <AmenitiesSection
+                amenities={amenities}
+                onSaveAmenities={saveAmenities}
+                selectedAmenities={selectedAmenities}
+                handleAmenityToggle={handleAmenityToggle}
+              />
             </div>
             <div className="flex pt-4 justify-content-between">
               <NavigationButtons

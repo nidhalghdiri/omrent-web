@@ -17,7 +17,7 @@ model User {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   name String?
   email String? @unique
-  emailVerified DateTime?
+  emailVerified Boolean?
   image String?
   hashedPassword String?
   createdAt DateTime @default(now())
@@ -72,6 +72,38 @@ model Listing {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]
+  propertyAmenities PropertyAmenity[] // Added this field for the relation
+}
+
+model AmenityCategory {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String    @unique
+  amenities   Amenity[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Amenity {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  icon        String?          // Optional field for amenity icon
+  categoryId  String @db.ObjectId
+  category    AmenityCategory   @relation(fields: [categoryId], references: [id])
+  properties  PropertyAmenity[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PropertyAmenity {
+  id String     @id @default(auto()) @map("_id") @db.ObjectId
+  propertyId String @db.ObjectId
+  amenityId  String @db.ObjectId
+
+  createdAt DateTime @default(now())
+
+  property   Listing @relation(fields: [propertyId], references: [id])
+  amenity    Amenity  @relation(fields: [amenityId], references: [id])
 }
 
 model Reservation {

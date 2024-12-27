@@ -4,7 +4,13 @@ import PropertyMap from "@/app/components/elements/PropertyMap";
 import RangeSlider from "@/app/components/elements/RangeSlider";
 import SidebarFilter from "@/app/components/elements/SidebarFilter";
 import VideoPopup from "@/app/components/elements/VideoPopup";
-import { SafeListing, SafeUser } from "@/app/types";
+import {
+  SafeAmenity,
+  SafeAmenityCategory,
+  SafeListing,
+  SafePropertyAmenity,
+  SafeUser,
+} from "@/app/types";
 import Link from "next/link";
 import React, { useCallback, useState } from "react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
@@ -129,6 +135,19 @@ interface ListingClientProps {
   currentUser: SafeUser | null;
   listing: SafeListing & {
     user: SafeUser;
+    propertyAmenities: {
+      id: string;
+      createdAt: string;
+      amenity: {
+        id: string;
+        name: string;
+        icon: string | null;
+        category: {
+          id: string;
+          name: string;
+        };
+      };
+    }[];
   };
 }
 
@@ -141,6 +160,17 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const handleAccordion = useCallback((key: any) => {
     setIsAccordion((prevState) => (prevState === key ? null : key));
   }, []);
+  const groupedAmenities = listing.propertyAmenities.reduce(
+    (acc, propertyAmenity) => {
+      const category = propertyAmenity.amenity.category.name;
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(propertyAmenity.amenity);
+      return acc;
+    },
+    {} as Record<string, { name: string; icon: string | null }[]>
+  );
   return (
     <>
       <section className="flat-location flat-slider-detail-v1">
@@ -159,7 +189,6 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 <img src={listing.thumbnailSrc} alt="Thumbnail of property" />
               </Link>
             </SwiperSlide>
-
             {/* Map through gallery images */}
             {listing.galleryImages?.map((imageSrc, index) => (
               <SwiperSlide key={index}>
@@ -426,6 +455,25 @@ const ListingClient: React.FC<ListingClientProps> = ({
               <div className="single-property-element single-property-feature">
                 <div className="h7 title fw-7">Amenities and features</div>
                 <div className="wrap-feature">
+                  {Object.entries(groupedAmenities).map(
+                    ([categoryName, amenities]) => (
+                      <div key={categoryName} className="box-feature">
+                        <div className="fw-7">{categoryName}:</div>
+                        <ul>
+                          {amenities.map((amenity) => (
+                            <li key={amenity.name} className="feature-item">
+                              {amenity.icon && (
+                                <span className={`icon ${amenity.icon}`} />
+                              )}
+                              {amenity.name}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )
+                  )}
+                </div>
+                {/* <div className="wrap-feature">
                   <div className="box-feature">
                     <div className="fw-7">Home safety:</div>
                     <ul>
@@ -497,7 +545,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                       </li>
                     </ul>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="single-property-element single-property-map">
                 <div className="h7 title fw-7">Map</div>

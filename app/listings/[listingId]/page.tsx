@@ -11,6 +11,7 @@ interface IParams {
 const ListingPage = async ({ params }: { params: Promise<IParams> }) => {
   const listing = await getListingById(params);
   const currentUser = await getCurrentUser();
+  console.log(listing);
   return (
     <>
       <Layout currentUser={currentUser} headerStyle={1} footerStyle={1}>

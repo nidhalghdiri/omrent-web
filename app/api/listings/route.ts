@@ -26,6 +26,7 @@ export async function POST(request: Request) {
     guestCount,
     thumbnailSrc,
     galleryImages,
+    amenities,
   } = body;
   try {
     const listing = await prisma.listing.create({
@@ -49,6 +50,31 @@ export async function POST(request: Request) {
         locationValue: location ?? "Unknown",
         price: parseInt(price, 10),
         userId: currentUser.id,
+      },
+      include: {
+        propertyAmenities: true, // Include property amenities in the response
+      },
+    });
+
+    // Save amenities associated with the property
+    if (amenities && amenities.length > 0) {
+      await prisma.propertyAmenity.createMany({
+        data: amenities.map((amenityId: string) => ({
+          propertyId: listing.id,
+          amenityId,
+        })),
+      });
+    }
+
+    // Fetch the updated listing with related amenities
+    const updatedListing = await prisma.listing.findUnique({
+      where: { id: listing.id },
+      include: {
+        propertyAmenities: {
+          include: {
+            amenity: true, // Include detailed amenity information
+          },
+        },
       },
     });
 
