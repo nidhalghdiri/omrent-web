@@ -8,6 +8,7 @@ import { SafeUser } from "@/app/types";
 import RegisterModal from "../elements/RegisterModal";
 import Footer from "./Footer";
 import { ToastContainer } from "react-toastify";
+import BottomNavigation from "./BottomNavigation";
 
 interface LayoutProps {
   currentUser?: SafeUser | null;
@@ -85,6 +86,7 @@ const Layout: React.FC<LayoutProps> = ({
       <LoginModal />
       <RegisterModal />
       <ToastContainer />
+      <BottomNavigation />
     </>
   );
 };
