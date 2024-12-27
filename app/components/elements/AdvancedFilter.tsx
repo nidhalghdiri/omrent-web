@@ -2,39 +2,76 @@
 import Link from "next/link";
 import { useState } from "react";
 import RangeSlider from "./RangeSlider";
+import { Controller, useForm } from "react-hook-form";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 interface AdvancedFilterProps {
   sidecls: string;
 }
+interface SearchFormInputs {
+  keyword?: string;
+  location?: string;
+  type?: string;
+}
 
 const AdvancedFilter: React.FC<AdvancedFilterProps> = ({ sidecls }) => {
+  const { handleSubmit, control } = useForm<SearchFormInputs>();
   const [isToggled, setToggled] = useState(false);
+  const [results, setResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
   const handleToggle = () => setToggled(!isToggled);
+  const onSubmit = (data: SearchFormInputs) => {
+    // Remove undefined values and ensure all values are strings
+    const sanitizedData = Object.entries(data).reduce((acc, [key, value]) => {
+      if (value !== undefined && value !== "") {
+        acc[key] = String(value); // Convert value to string
+      }
+      return acc;
+    }, {} as Record<string, string>);
+
+    // Redirect to the Properties page with query parameters
+    const query = new URLSearchParams(sanitizedData).toString();
+    router.push(`/listings?${query}`);
+  };
+
   return (
-    <>
+    <form method="post" onSubmit={handleSubmit(onSubmit)}>
       <div className={`wd-find-select ${sidecls ? sidecls : ""}`}>
         <div className="inner-group">
           <div className="form-group-1 search-form form-style">
             <label>Keyword</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search Keyword."
-              name="s"
-              title="Search for"
-              required
+            <Controller
+              name="keyword"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <input
+                  {...field}
+                  type="text"
+                  className="form-control"
+                  placeholder="Search Keyword."
+                />
+              )}
             />
           </div>
           <div className="form-group-2 form-style">
             <label>Location</label>
             <div className="group-ip">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search Location"
-                name="s"
-                title="Search for"
-                required
+              <Controller
+                name="location"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type="text"
+                    className="form-control"
+                    placeholder="Search Location"
+                  />
+                )}
               />
               <Link href="#" className="icon icon-location" />
             </div>
@@ -42,23 +79,20 @@ const AdvancedFilter: React.FC<AdvancedFilterProps> = ({ sidecls }) => {
           <div className="form-group-3 form-style">
             <label>Type</label>
             <div className="group-select">
-              <select className="nice-select">
-                <option data-value className="option selected">
-                  All
-                </option>
-                <option data-value="villa" className="option">
-                  Villa
-                </option>
-                <option data-value="studio" className="option">
-                  Studio
-                </option>
-                <option data-value="office" className="option">
-                  Office
-                </option>
-                <option data-value="house" className="option">
-                  House
-                </option>
-              </select>
+              <Controller
+                name="type"
+                control={control}
+                defaultValue="all"
+                render={({ field }) => (
+                  <select {...field} className="nice-select">
+                    <option value="all">All</option>
+                    <option value="apartment">Apartment</option>
+                    <option value="villa">Villa</option>
+                    <option value="studio">Studio</option>
+                    <option value="office">Office</option>
+                  </select>
+                )}
+              />
             </div>
           </div>
           <div className="form-group-4 box-filter">
@@ -69,7 +103,7 @@ const AdvancedFilter: React.FC<AdvancedFilterProps> = ({ sidecls }) => {
           </div>
         </div>
         <button type="submit" className="tf-btn primary">
-          Find Properties
+          {isLoading ? "Searching..." : "Find Properties"}
         </button>
       </div>
       <div className={`wd-search-form ${isToggled ? "show" : ""}`}>
@@ -469,7 +503,7 @@ const AdvancedFilter: React.FC<AdvancedFilterProps> = ({ sidecls }) => {
           </div>
         </div>
       </div>
-    </>
+    </form>
   );
 };
 

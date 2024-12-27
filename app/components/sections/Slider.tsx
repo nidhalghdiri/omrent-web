@@ -52,9 +52,7 @@ const Slider = () => {
                   <div className="tab-content">
                     <div className="tab-pane fade active show" role="tabpanel">
                       <div className="form-sl">
-                        <form method="post">
-                          <AdvancedFilter sidecls="style-2 shadow-st" />
-                        </form>
+                        <AdvancedFilter sidecls="style-2 shadow-st" />
                       </div>
                     </div>
                   </div>
