@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import Menu from "./Menu";
 import MobileMenu from "./MobileMenu";
@@ -35,6 +35,7 @@ const Header: React.FC<HeaderProps> = ({
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
   const [isToggled, setToggled] = useState(false);
+
   const handleToggle = useCallback(() => {
     console.log("isToggled", isToggled);
     setToggled(!isToggled);
@@ -77,15 +78,7 @@ const Header: React.FC<HeaderProps> = ({
             <span className="icon icon-arr-down" />
           </p>
         </a>
-        <div
-          className={`dropdown-menu  ${isToggled ? "show" : ""}`}
-          // style={{
-          //   position: "absolute",
-          //   top: "100%", // Dropdown appears below the button
-          //   left: "0", // Align to the left of the button
-          //   marginTop: "0.5rem",
-          // }}
-        >
+        <div className={`dropdown-menu  ${isToggled ? "show" : ""}`}>
           <Link className="dropdown-item" href="/my-favorites">
             My Properties
           </Link>
@@ -124,13 +117,15 @@ const Header: React.FC<HeaderProps> = ({
 
   let mobileLoginInfo = (
     <div className="login-box flex align-items-center">
-      <Link href="#modalLogin" data-bs-toggle="modal">
-        Login
-      </Link>
-      <span>/</span>
-      <Link href="#modalRegister" data-bs-toggle="modal">
-        Register
-      </Link>
+      <ul className="d-flex">
+        <li>
+          <a onClick={loginModal.onOpen}>Login</a>
+        </li>
+        <li>/</li>
+        <li>
+          <a onClick={registerModal.onOpen}>Register</a>
+        </li>
+      </ul>
     </div>
   );
 
@@ -149,7 +144,7 @@ const Header: React.FC<HeaderProps> = ({
       </>
     );
   }
-
+  console.log("Scroll from heade", scroll);
   return (
     <>
       <header
@@ -176,17 +171,35 @@ const Header: React.FC<HeaderProps> = ({
                   </div>
                 </div>
                 <div className="nav-outer">
-                  {/* Main Menu */}
-                  <nav className="main-menu show navbar-expand-md">
-                    <div
-                      className="navbar-collapse collapse clearfix"
-                      id="navbarSupportedContent"
-                    >
-                      <Menu />
+                  {scroll && !isMobileMenu ? (
+                    // Small Search Bar (Visible on Scroll)
+                    <div className="outer-search">
+                      <div className="form-box box-1">
+                        <input type="text" placeholder="Enter Keyword" />
+                      </div>
+                      <div className="form-box box-2">
+                        <input type="text" placeholder="Search Location" />
+                      </div>
+                      <div className="form-box box-3">
+                        <input type="text" placeholder="Choose Type" />
+                      </div>
+                      <a className="btn-search filter-search-canvas">
+                        <span className="icon icon-search" />
+                      </a>
                     </div>
-                  </nav>
-                  {/* Main Menu End*/}
+                  ) : (
+                    // Main Menu (Visible by Default)
+                    <nav className="main-menu show navbar-expand-md">
+                      <div
+                        className="navbar-collapse collapse clearfix"
+                        id="navbarSupportedContent"
+                      >
+                        <Menu />
+                      </div>
+                    </nav>
+                  )}
                 </div>
+
                 {loginInfo}
                 <div
                   className="mobile-nav-toggler mobile-button"
@@ -247,6 +260,47 @@ const Header: React.FC<HeaderProps> = ({
           </nav>
         </div>
         {/* End Mobile Menu */}
+        {/* <div
+          className={`wd-find-select ${scroll ? "hidden" : "visible"}`}
+          style={{ marginTop: "20px" }}
+        >
+          <div className="inner-group">
+            <div className="form-group-1 search-form form-style">
+              <label>Keyword</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search Keyword."
+              />
+            </div>
+            <div className="form-group-2 form-style">
+              <label>Location</label>
+              <div className="group-ip">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search Location"
+                />
+                <a href="#" className="icon icon-location" />
+              </div>
+            </div>
+            <div className="form-group-3 form-style">
+              <label>Type</label>
+              <div className="group-select">
+                <select className="nice-select">
+                  <option value="all">All</option>
+                  <option value="apartment">Apartment</option>
+                  <option value="villa">Villa</option>
+                  <option value="studio">Studio</option>
+                  <option value="office">Office</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" className="tf-btn primary">
+              Find Properties
+            </button>
+          </div>
+        </div> */}
       </header>
     </>
   );

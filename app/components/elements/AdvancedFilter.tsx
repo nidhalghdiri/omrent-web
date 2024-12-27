@@ -103,7 +103,7 @@ const AdvancedFilter: React.FC<AdvancedFilterProps> = ({ sidecls }) => {
           </div>
         </div>
         <button type="submit" className="tf-btn primary">
-          {isLoading ? "Searching..." : "Find Properties"}
+          {isLoading ? "Searching..." : <span className="icon icon-search" />}
         </button>
       </div>
       <div className={`wd-search-form ${isToggled ? "show" : ""}`}>

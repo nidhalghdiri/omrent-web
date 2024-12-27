@@ -31,7 +31,7 @@ const Recommended: React.FC<RecommendedProps> = ({ currentUser, listings }) => {
             <div className="text-subtitle text-primary">
               Featured Properties
             </div>
-            <h4 className="mt-4">Recommended For You</h4>
+            <h4 className="my-4">Recommended For You</h4>
           </div>
 
           <div
@@ -39,7 +39,7 @@ const Recommended: React.FC<RecommendedProps> = ({ currentUser, listings }) => {
             data-wow-delay=".2s"
             data-wow-duration="2000ms"
           >
-            <ul
+            {/* <ul
               className="nav-tab-recommended justify-content-center"
               role="tablist"
             >
@@ -83,7 +83,7 @@ const Recommended: React.FC<RecommendedProps> = ({ currentUser, listings }) => {
                   Studio
                 </a>
               </li>
-            </ul>
+            </ul> */}
             <div className="tab-content">
               <div
                 style={{ opacity: isVisible ? 1 : 0 }}

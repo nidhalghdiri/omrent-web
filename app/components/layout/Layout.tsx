@@ -36,6 +36,14 @@ const Layout: React.FC<LayoutProps> = ({
       document.body.classList.remove("mobile-menu-visible");
     }
   }, [isMobileMenu]);
+  useEffect(() => {
+    const handleScroll = () => {
+      setScroll(window.scrollY > 100); // Adjust scroll threshold as needed
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   // Login
 
   // const [isLogin, setLogin] = useState(false);
