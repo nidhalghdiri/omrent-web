@@ -28,6 +28,8 @@ const Layout: React.FC<LayoutProps> = ({
   const [scroll, setScroll] = useState(false);
   // Mobile Menu
   const [isMobileMenu, setMobileMenu] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
   const handleMobileMenu = useCallback(() => {
     setMobileMenu(!isMobileMenu);
     if (!isMobileMenu) {
@@ -43,6 +45,12 @@ const Layout: React.FC<LayoutProps> = ({
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
   // Login
 
@@ -79,6 +87,7 @@ const Layout: React.FC<LayoutProps> = ({
               handleMobileMenu={handleMobileMenu}
               isRegister={isRegister}
               handleRegister={handleRegister}
+              isMobile={isMobile}
             />
           ) : null}
           <main className="main">

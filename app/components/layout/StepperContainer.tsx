@@ -56,6 +56,7 @@ const StepperContainer: React.FC<StepperContainerProps> = ({ amenities }) => {
   // Form Handling
   const {
     register,
+    trigger,
     handleSubmit,
     setValue,
     watch,
@@ -106,6 +107,21 @@ const StepperContainer: React.FC<StepperContainerProps> = ({ amenities }) => {
       : [...currentAmenities, id]; // Select
     setValue("amenities", updatedAmenities, { shouldValidate: true });
     console.log("Selected Amenities:", updatedAmenities); // Debugging
+  };
+
+  const validateStep = async (fields: string[]) => {
+    const isValid = await trigger(fields);
+    if (!isValid) {
+      toast.error("Please fill out all required fields before proceeding.");
+    }
+    return isValid;
+  };
+  const onNextStep = async (stepFields: string[]) => {
+    const isValid = await validateStep(stepFields);
+    if (isValid) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      stepperRef.current.nextCallback();
+    }
   };
   // Submission Handler
   const onSubmit = (data: FieldValues) => {
@@ -228,6 +244,7 @@ const StepperContainer: React.FC<StepperContainerProps> = ({ amenities }) => {
                     register={register}
                     errors={errors}
                     id="type"
+                    required
                     label="Property Type"
                     defaultValue="apartment"
                     options={propertyTypes}
@@ -245,10 +262,7 @@ const StepperContainer: React.FC<StepperContainerProps> = ({ amenities }) => {
             <div className="flex pt-4 justify-content-end">
               <NavigationButtons
                 isFirstStep
-                onNext={() => {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                  stepperRef.current.nextCallback();
-                }}
+                onNext={() => onNextStep(["title", "type"])}
               />
             </div>
           </StepperPanel>
@@ -310,6 +324,7 @@ const StepperContainer: React.FC<StepperContainerProps> = ({ amenities }) => {
                     id="propertyId"
                     label="Property ID"
                     type="text"
+                    required
                   />
                   <Input
                     register={register}
@@ -351,10 +366,16 @@ const StepperContainer: React.FC<StepperContainerProps> = ({ amenities }) => {
                   window.scrollTo({ top: 0, behavior: "smooth" });
                   stepperRef.current.prevCallback();
                 }}
-                onNext={() => {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                  stepperRef.current.nextCallback();
-                }}
+                onNext={() =>
+                  onNextStep([
+                    "country",
+                    "state",
+                    "address",
+                    "propertyId",
+                    "roomCount",
+                    "bathroomCount",
+                  ])
+                }
               />
             </div>
           </StepperPanel>
@@ -382,6 +403,7 @@ const StepperContainer: React.FC<StepperContainerProps> = ({ amenities }) => {
                     label="Rent Cycle"
                     defaultValue="year"
                     options={rentCycles}
+                    required
                   />
                 </div>
                 <fieldset className="box-cb d-flex align-items-center gap-6">
@@ -396,10 +418,7 @@ const StepperContainer: React.FC<StepperContainerProps> = ({ amenities }) => {
                   window.scrollTo({ top: 0, behavior: "smooth" });
                   stepperRef.current.prevCallback();
                 }}
-                onNext={() => {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                  stepperRef.current.nextCallback();
-                }}
+                onNext={() => onNextStep(["price", "rentCycle"])}
               />
             </div>
           </StepperPanel>

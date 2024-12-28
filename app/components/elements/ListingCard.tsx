@@ -34,7 +34,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
             <div className="top">
               <ul className="d-flex gap-8 flex-column">
                 <li className="flag-tag success">Featured</li>
-                <li className="flag-tag style-1">For Sale</li>
+                <li className="flag-tag style-1">{listing.type}</li>
               </ul>
               <ul className="d-flex gap-4">
                 <li className="box-icon w-32">
@@ -58,7 +58,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
             </div>
             <div className="desc">
               <i className="fs-16 icon icon-mapPin" />
-              <p>15 Willow Street, Seattle, WA</p>
+              <p>{`${listing.address}, ${listing.state}, ${listing.country}`}</p>
             </div>
             <ul className="meta-list">
               <li className="item">
@@ -71,7 +71,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
               </li>
               <li className="item">
                 <i className="icon icon-ruler" />
-                <span>600 SqFT</span>
+                <span>{listing.size} SqFT</span>
               </li>
             </ul>
           </div>
@@ -82,15 +82,15 @@ const ListingCard: React.FC<ListingCardProps> = ({
               <div className="avatar avt-40 round">
                 <img src="/images/avatar/avt-6.jpg" alt="avt" />
               </div>
-              <span>Arlene McCoy</span>
+              <span>{currentUser?.name}</span>
             </div>
           ) : (
-            <p>Apród Endre</p>
+            <p>{currentUser?.name}</p>
           )}
 
           <div className="d-flex align-items-center">
             <div className="h7 fw-7">${listing.price}</div>
-            <p className="text-variant-1">/Night</p>
+            <p className="text-variant-1">/{listing.rentCycle}</p>
           </div>
         </div>
       </div>

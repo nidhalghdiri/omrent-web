@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Menu from "./Menu";
 import MobileMenu from "./MobileMenu";
@@ -11,6 +11,8 @@ import Avatar from "../elements/Avatar";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Button from "../buttons/Button";
+import { CSSTransition } from "react-transition-group";
+import HeaderFilter from "../elements/HeaderFilter";
 
 interface HeaderProps {
   currentUser?: SafeUser | null;
@@ -19,12 +21,14 @@ interface HeaderProps {
   handleMobileMenu: () => void;
   isRegister: boolean;
   handleRegister: () => void;
+  isMobile: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({
   currentUser,
   scroll,
   isMobileMenu,
+  isMobile,
   isRegister,
   handleMobileMenu,
   handleRegister,
@@ -35,6 +39,8 @@ const Header: React.FC<HeaderProps> = ({
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
   const [isToggled, setToggled] = useState(false);
+  const searchBarRef = useRef(null);
+  const menuRef = useRef(null);
 
   const handleToggle = useCallback(() => {
     console.log("isToggled", isToggled);
@@ -162,34 +168,43 @@ const Header: React.FC<HeaderProps> = ({
                   <div className="logo">
                     <Link href="/">
                       <img
-                        src="/images/logo/logo@2x.png"
+                        src={
+                          isMobile
+                            ? "/images/logo/logo-small.png"
+                            : "/images/logo/logo@2x.png"
+                        }
                         alt="logo"
-                        width={174}
-                        height={44}
+                        width={isMobile ? 50 : 174}
+                        height={isMobile ? 30 : 44}
                       />
                     </Link>
                   </div>
                 </div>
+
                 <div className="nav-outer">
-                  {scroll && !isMobileMenu ? (
-                    // Small Search Bar (Visible on Scroll)
-                    <div className="outer-search">
-                      <div className="form-box box-1">
-                        <input type="text" placeholder="Enter Keyword" />
-                      </div>
-                      <div className="form-box box-2">
-                        <input type="text" placeholder="Search Location" />
-                      </div>
-                      <div className="form-box box-3">
-                        <input type="text" placeholder="Choose Type" />
-                      </div>
-                      <a className="btn-search filter-search-canvas">
-                        <span className="icon icon-search" />
-                      </a>
+                  <CSSTransition
+                    in={scroll && !isMobile} // Show search bar on scroll
+                    timeout={600} // Match the duration in CSS
+                    classNames="fade"
+                    nodeRef={searchBarRef}
+                    unmountOnExit
+                  >
+                    <div className="outer-search" ref={searchBarRef}>
+                      <HeaderFilter />
                     </div>
-                  ) : (
-                    // Main Menu (Visible by Default)
-                    <nav className="main-menu show navbar-expand-md">
+                  </CSSTransition>
+
+                  <CSSTransition
+                    in={!scroll || isMobile} // Show menu when not scrolling
+                    timeout={600} // Match the duration in CSS
+                    classNames="fade"
+                    nodeRef={menuRef}
+                    unmountOnExit
+                  >
+                    <nav
+                      className="main-menu show navbar-expand-md"
+                      ref={menuRef}
+                    >
                       <div
                         className="navbar-collapse collapse clearfix"
                         id="navbarSupportedContent"
@@ -197,10 +212,10 @@ const Header: React.FC<HeaderProps> = ({
                         <Menu />
                       </div>
                     </nav>
-                  )}
+                  </CSSTransition>
                 </div>
 
-                {loginInfo}
+                {!isMobile && loginInfo}
                 <div
                   className="mobile-nav-toggler mobile-button"
                   onClick={handleMobileMenu}

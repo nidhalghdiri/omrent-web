@@ -1927,11 +1927,22 @@ label {
   padding: 0px 16px;
   font-size: 18px;
   line-height: 28px;
-  color: #a3abb0;
+  color: #000;
   border: 0;
   border-radius: 0;
 }
 .main-header .outer-search input::placeholder {
+  color: #a3abb0;
+}
+.main-header .outer-search select {
+  padding: 0px 16px;
+  font-size: 18px;
+  line-height: 28px;
+  color: #000;
+  border: 0;
+  border-radius: 0;
+}
+.main-header .outer-search select::placeholder {
   color: #a3abb0;
 }
 .main-header .btn-search {
@@ -10472,6 +10483,26 @@ tr {
   .bottom-navigation {
     display: flex; /* Show on small screens */
   }
+}
+/* Base Styles */
+/* Smooth fade animations */
+.fade-enter {
+  opacity: 0;
+  transform: translateY(-20px); /* Start slightly above */
+}
+.fade-enter-active {
+  opacity: 1;
+  transform: translateY(0); /* Reset to original position */
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* Smooth easing */
+}
+.fade-exit {
+  opacity: 1;
+  transform: translateY(0); /* Start at original position */
+}
+.fade-exit-active {
+  opacity: 0;
+  transform: translateY(-20px); /* Exit slightly above */
+  transition: opacity 0.6s ease-in, transform 0.6s ease-in; /* Smooth easing */
 }
 
 /*# sourceMappingURL=styles.css.map */
