@@ -79,10 +79,10 @@ const ListingsClient: React.FC<ListingsClientProps> = ({
             </div>
           </div>
           <div className="row">
-            <div className="col-xl-4 col-lg-5">
+            <div className="col-xl-4 col-lg-5 filter-sidebar">
               <FilterSidebar />
             </div>
-            <div className="col-xl-8 col-lg-7">
+            <div className="col-xl-8 col-lg-7 properties-list">
               <div className="tab-content">
                 <div
                   style={{ opacity: isVisible ? 1 : 0 }}
@@ -130,6 +130,23 @@ const ListingsClient: React.FC<ListingsClientProps> = ({
                 </div>
               </div>
             </div>
+            <style jsx>{`
+              .filter-sidebar {
+                order: 1; /* Default order */
+              }
+              .properties-list {
+                order: 2; /* Default order */
+              }
+
+              @media (max-width: 991px) {
+                .filter-sidebar {
+                  order: 2; /* Sidebar after list */
+                }
+                .properties-list {
+                  order: 1; /* List comes first */
+                }
+              }
+            `}</style>
           </div>
         </div>
       </section>

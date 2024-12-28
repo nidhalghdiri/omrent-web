@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import HeartButton from "./HeartButton";
+import { useRouter } from "next/navigation";
 
 interface ListingCardProps {
   currentUser?: SafeUser | null;
@@ -17,6 +18,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
   listing,
   isSearchList,
 }) => {
+  const router = useRouter();
   return (
     <div className={`${!isSearchList ? "col-xl-3 col-md-6" : "col-md-6"}`}>
       <div className={`homeya-box ${!isSearchList && "md"}`}>
@@ -33,15 +35,18 @@ const ListingCard: React.FC<ListingCardProps> = ({
             </div>
             <div className="top">
               <ul className="d-flex gap-8 flex-column">
-                <li className="flag-tag success">Featured</li>
+                {/* <li className="flag-tag success">Featured</li> */}
                 <li className="flag-tag style-1">{listing.type}</li>
               </ul>
               <ul className="d-flex gap-4">
-                <li className="box-icon w-32">
+                {/* <li className="box-icon w-32">
                   <span className="icon icon-arrLeftRight" />
-                </li>
+                </li> */}
                 <HeartButton listingId={listing.id} currentUser={currentUser} />
-                <li className="box-icon w-32">
+                <li
+                  className="box-icon w-32"
+                  onClick={() => router.push(`/listings/${listing.id}`)}
+                >
                   <span className="icon icon-eye" />
                 </li>
               </ul>
