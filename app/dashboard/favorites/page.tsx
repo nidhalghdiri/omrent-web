@@ -1,8 +1,8 @@
 import React from "react";
-import getCurrentUser from "../actions/getCurrentUser";
-import Layout from "../components/layout/Layout";
+import getCurrentUser from "../../actions/getCurrentUser";
+import Layout from "../../components/layout/Layout";
 import FavoritesClient from "./FavoritesClient";
-import getFavoriteListings from "../actions/getFavoriteListings";
+import getFavoriteListings from "../../actions/getFavoriteListings";
 
 const FavoritesPage = async () => {
   const currentUser = await getCurrentUser();

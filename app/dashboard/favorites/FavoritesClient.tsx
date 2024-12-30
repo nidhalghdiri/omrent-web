@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
-import { SafeListing, SafeUser } from "../types";
+import { SafeListing, SafeUser } from "../../types";
 import Link from "next/link";
+import SideBarMenu from "../../components/layout/SideBarMenu";
 
 interface FavoritesClientProps {
   currentUser?: SafeUser | null;
@@ -14,9 +15,10 @@ const FavoritesClient: React.FC<FavoritesClientProps> = ({
 }) => {
   return (
     <>
-      <div className={`layout-wrap`}>
-        <div className="main-content">
-          <div className="main-content-inner">
+      <div className="main-content">
+        <div className="main-content-inner d-flex">
+          <SideBarMenu />
+          <div className={`layout-wrap  w-100  m-2`}>
             <div className="widget-box-2 wd-listing">
               <h6 className="title">My Favorites</h6>
               <div className="wrap-table">

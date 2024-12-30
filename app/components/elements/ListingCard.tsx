@@ -20,7 +20,9 @@ const ListingCard: React.FC<ListingCardProps> = ({
 }) => {
   const router = useRouter();
   return (
-    <div className={`${!isSearchList ? "col-xl-3 col-md-6" : "col-md-6"}`}>
+    <div
+      className={`${!isSearchList ? "col-xl-4 col-md-6" : "col-md-6"}  my-2`}
+    >
       <div className={`homeya-box ${!isSearchList && "md"}`}>
         <div className="archive-top">
           <div className="images-group">

@@ -43,7 +43,7 @@ export default function SideBarMenu() {
               pathname === "/my-favorites" ? "active" : ""
             }`}
           >
-            <Link className="nav-menu-link" href="/my-favorites">
+            <Link className="nav-menu-link" href="/dashboard/favorites">
               <span className="icon icon-heart" />
               My Favorites
             </Link>
@@ -68,10 +68,10 @@ export default function SideBarMenu() {
           </li>
           <li
             className={`nav-menu-item ${
-              pathname === "/add-property" ? "active" : ""
+              pathname === "/dashboard/add-property" ? "active" : ""
             }`}
           >
-            <Link className="nav-menu-link" href="/add-property">
+            <Link className="nav-menu-link" href="/dashboard/add-property">
               <svg
                 width={24}
                 height={24}

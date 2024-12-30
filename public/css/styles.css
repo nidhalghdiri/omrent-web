@@ -5500,6 +5500,8 @@ label {
 
 .flat-recommended .homeya-box {
   margin-bottom: 30px;
+  /* max-height: 450px;
+  height: 100%; */
 }
 .flat-recommended .tf-btn {
   margin-top: 10px;
@@ -9502,9 +9504,9 @@ tr {
     visibility: hidden;
     opacity: 0;
   }
-  .layout-wrap .sidebar-menu-dashboard {
+  /* .layout-wrap .sidebar-menu-dashboard {
     transform: translateX(-100%);
-  }
+  } */
   .layout-wrap .main-content {
     padding-left: 0;
   }

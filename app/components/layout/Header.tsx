@@ -182,7 +182,7 @@ const Header: React.FC<HeaderProps> = ({
                 </div>
 
                 <div className="nav-outer">
-                  <CSSTransition
+                  {/* <CSSTransition
                     in={scroll && !isMobile} // Show search bar on scroll
                     timeout={600} // Match the duration in CSS
                     classNames="fade"
@@ -192,27 +192,27 @@ const Header: React.FC<HeaderProps> = ({
                     <div className="outer-search" ref={searchBarRef}>
                       <HeaderFilter />
                     </div>
-                  </CSSTransition>
+                  </CSSTransition> */}
 
-                  <CSSTransition
+                  {/* <CSSTransition
                     in={!scroll || isMobile} // Show menu when not scrolling
                     timeout={600} // Match the duration in CSS
                     classNames="fade"
                     nodeRef={menuRef}
                     unmountOnExit
+                  > */}
+                  <nav
+                    className="main-menu show navbar-expand-md"
+                    ref={menuRef}
                   >
-                    <nav
-                      className="main-menu show navbar-expand-md"
-                      ref={menuRef}
+                    <div
+                      className="navbar-collapse collapse clearfix"
+                      id="navbarSupportedContent"
                     >
-                      <div
-                        className="navbar-collapse collapse clearfix"
-                        id="navbarSupportedContent"
-                      >
-                        <Menu />
-                      </div>
-                    </nav>
-                  </CSSTransition>
+                      <Menu />
+                    </div>
+                  </nav>
+                  {/* </CSSTransition> */}
                 </div>
 
                 {!isMobile && loginInfo}
