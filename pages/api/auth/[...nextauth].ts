@@ -26,16 +26,17 @@ export const authOptions: AuthOptions = {
         password: { label: "password", type: "password" },
       },
       async authorize(credentials) {
+        console.log("Credentials received:", credentials);
         if (!credentials?.email || !credentials?.password) {
+          console.error("Missing email or password");
           throw new Error("Invalid Credentials");
         }
 
         const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email,
-          },
+          where: { email: credentials.email },
         });
         if (!user || !user?.hashedPassword) {
+          console.error("User not found or invalid password");
           throw new Error("Invalid Credentials");
         }
 
@@ -44,33 +45,50 @@ export const authOptions: AuthOptions = {
           user.hashedPassword
         );
         if (!isCorrectPassword) {
-          throw new Error("Invalid Creadentials");
+          console.error("Incorrect password");
+          throw new Error("Invalid Credentials");
         }
 
+        console.log("User authorized:", user);
         return user;
       },
     }),
   ],
   pages: {
-    signIn: "/",
+    signIn: "/", // Default page for sign-in
+    error: "/error", // Default page for errors
   },
   debug: process.env.NODE_ENV === "development",
   session: {
     strategy: "jwt",
   },
   callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      console.log("User:", user);
+      console.log("Account:", account);
+      console.log("Profile:", profile);
+      return true; // Allow sign-in
+    },
+    async redirect({ url, baseUrl }) {
+      // Only redirect for non-API routes
+      if (url.startsWith(baseUrl) || url.startsWith("/")) {
+        return url;
+      }
+      // Return a JSON object instead of redirecting for API clients
+      return "/api/auth/session";
+    },
+    async session({ session, token }) {
+      session.user.id = token.id; // Include user ID in the session object
+      return session;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.email = user.email;
       }
       return token;
     },
-    async session({ session, token }) {
-      session.user = { id: token.id, email: token.email };
-      return session;
-    },
   },
+
   secret: process.env.NEXTAUTH_SECRET,
 };
 

@@ -5,15 +5,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  console.log("Token received:", token);
+  const secret = process.env.NEXTAUTH_SECRET;
+  const token = await getToken({ req, secret });
 
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  return res.status(200).json({
-    message: "Protected content",
-    user: { id: token.id, email: token.email },
-  });
+  res.status(200).json({ token });
 }

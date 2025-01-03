@@ -9,7 +9,7 @@ import AdvancedFilter from "./components/elements/AdvancedFilter";
 export default async function Home() {
   const currentUser = await getCurrentUser();
   const listings = await getListings({});
-  console.log("listings : ", listings);
+  // console.log("listings : ", listings);
   return (
     <>
       <Layout currentUser={currentUser} headerStyle={1} footerStyle={1}>
