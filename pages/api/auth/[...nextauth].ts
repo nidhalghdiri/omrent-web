@@ -7,6 +7,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 
 import prisma from "../../../app/libs/prismadb";
+var jwt = require("jsonwebtoken");
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -48,9 +49,13 @@ export const authOptions: AuthOptions = {
           console.error("Incorrect password");
           throw new Error("Invalid Credentials");
         }
-
+        const token = jwt.sign(
+          { id: user.id, email: user.email },
+          process.env.JWT_SECRET,
+          { expiresIn: "30d" }
+        );
         console.log("User authorized:", user);
-        return user;
+        return { ...user, token };
       },
     }),
   ],
@@ -65,8 +70,8 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       console.log("User:", user);
-      console.log("Account:", account);
-      console.log("Profile:", profile);
+      // console.log("Account:", account);
+      // console.log("Profile:", profile);
       return true; // Allow sign-in
     },
     async redirect({ url, baseUrl }) {
@@ -77,15 +82,29 @@ export const authOptions: AuthOptions = {
       // Return a JSON object instead of redirecting for API clients
       return "/api/auth/session";
     },
-    async session({ session, token }) {
-      session.user.id = token.id; // Include user ID in the session object
-      return session;
-    },
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        token.id = String(user.id);
       }
       return token;
+    },
+    // async session({ session, token }) {
+    //   if (typeof token.id === "string") {
+    //     session.user.id = token.id;
+    //   }
+    //   if (token.jwt) {
+    //     session.jwt = token.jwt;
+    //   }
+    //   return session;
+    // },
+    async session({ session, token, user }) {
+      // Adding token to the session user
+      session.user = {
+        ...session.user,
+        id: user.id,
+        token: (user.token as string) || (token.token as string), // Use token from JWT if available
+      };
+      return session;
     },
   },
 
