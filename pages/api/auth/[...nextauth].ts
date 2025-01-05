@@ -84,7 +84,10 @@ export const authOptions: AuthOptions = {
     },
     async jwt({ token, user }) {
       if (user) {
-        token.id = String(user.id);
+        // Here we add user properties to the token so they are available for the session
+        token.id = user.id; // Ensure user ID is available in token
+        token.email = user.email; // Add email if needed
+        token.name = user.name; // Add user name if needed
       }
       return token;
     },
@@ -98,6 +101,9 @@ export const authOptions: AuthOptions = {
     //   return session;
     // },
     async session({ session, token, user }) {
+      console.log("*** CallBack *** Session ", session);
+      console.log("*** CallBack *** Token ", token);
+      console.log("*** CallBack *** User ", user);
       // Adding token to the session user
       session.user = {
         ...session.user,
