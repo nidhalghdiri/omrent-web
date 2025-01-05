@@ -88,6 +88,7 @@ export const authOptions: AuthOptions = {
         token.id = user.id; // Ensure user ID is available in token
         token.email = user.email; // Add email if needed
         token.name = user.name; // Add user name if needed
+        token.jwt = user.token; // Assuming you want to store token in JWT
       }
       return token;
     },
@@ -100,16 +101,17 @@ export const authOptions: AuthOptions = {
     //   }
     //   return session;
     // },
-    async session({ session, token, user }) {
+    async session({ session, token }) {
       console.log("*** CallBack *** Session ", session);
       console.log("*** CallBack *** Token ", token);
-      console.log("*** CallBack *** User ", user);
+
       // Adding token to the session user
       session.user = {
         ...session.user,
-        id: user.id,
-        token: (user.token as string) || (token.token as string), // Use token from JWT if available
+        id: (token.id as string) || "", // Use id from token
+        token: (token.jwt as string) || (token.token as string), // Use token from JWT if available
       };
+
       return session;
     },
   },
