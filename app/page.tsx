@@ -14,10 +14,12 @@ export default async function Home() {
     <>
       <Layout currentUser={currentUser} headerStyle={1} footerStyle={1}>
         <div className="tab-content">
-          <div className="tab-pane fade active show" role="tabpanel">
-            <div className="form-sl">
-              <AdvancedFilter sidecls="style-2 shadow-st" />
-              {/* End Job  Search Form*/}
+          <div className="container">
+            <div className="tab-pane fade active show" role="tabpanel">
+              <div className="form-sl">
+                <AdvancedFilter sidecls="style-2 shadow-st" />
+                {/* End Job  Search Form*/}
+              </div>
             </div>
           </div>
         </div>
